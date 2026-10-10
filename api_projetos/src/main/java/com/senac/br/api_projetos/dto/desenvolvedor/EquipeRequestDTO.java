@@ -5,10 +5,10 @@ import com.senac.br.api_projetos.model.Desenvolvedor;
 import com.senac.br.api_projetos.model.GerenteProjeto;
 
 public record EquipeRequestDTO(
-                GerenteProjeto gerente
+                
+                Integer idGerente,
+                List<Integer> idDesenvolvedores
 
-// List<Desenvolvedor> desenvolvedor
-// Projeto projeto
 
 ) {
 

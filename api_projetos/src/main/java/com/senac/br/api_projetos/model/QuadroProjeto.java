@@ -16,12 +16,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "quadro_projeto")
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString 
 public class QuadroProjeto {
 
     @Id

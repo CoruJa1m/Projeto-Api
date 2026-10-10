@@ -14,4 +14,26 @@ public class ProjetoService {
         this.projetoRepository = projetoRepository;
     }
 
+
+    public String salvar(Projeto projeto) {
+        projetoRepository.save(projeto);
+        return "Projeto salvo com sucesso";
+    }
+
+
+    public String deletar(int id){
+        if (projetoRepository.existsById(id)) {
+            projetoRepository.deleteById(id);
+            return "Projeto deletado com sucesso";
+        }else{
+            return "Projeto não encontrado, verifique novamente!!";
+        }
+    }
+
+    
+
+
+
+
+
 }
