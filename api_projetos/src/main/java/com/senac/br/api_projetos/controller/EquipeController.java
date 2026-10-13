@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.senac.br.api_projetos.dto.desenvolvedor.EquipeRequestDTO;
+import com.senac.br.api_projetos.dto.equipe.EquipeRequestDTO;
 import com.senac.br.api_projetos.service.EquipeService;
-
-
 
 @RestController
 @RequestMapping("/Equipe")
@@ -30,29 +28,27 @@ public class EquipeController {
         return equipeService.salvar(equipe);
     }
 
-
     @DeleteMapping("/DeletarEquipe/{id}")
-    public String deletarEquipe(@PathVariable int id){
+    public String deletarEquipe(@PathVariable int id) {
         return equipeService.deletar(id);
     }
 
-
-    //esse metodo não está funcionando, ele retorna uma lista vazia mesmo com dados cadastrados
+    // esse metodo não está funcionando, ele retorna uma lista vazia mesmo com dados
+    // cadastrados
     @GetMapping("/ListarEquipe/{id}")
-    public String listarEquipe(@PathVariable int id){
+    public String listarEquipe(@PathVariable int id) {
         return equipeService.listar();
     }
 
-
-    // esse metodo esta retornando o objeto e nao o to string de forma correta verificar 
+    // esse metodo esta retornando o objeto e nao o to string de forma correta
+    // verificar
     @GetMapping("/BuscarEquipe/{id}")
-    public String buscarEquipe(@PathVariable int id){
+    public String buscarEquipe(@PathVariable int id) {
         return equipeService.buscarPorid(id);
     }
 
-
     @PutMapping("AtualizarEquipe/{id}")
-    public String atualizarEquipe(@PathVariable int id, @RequestBody EquipeRequestDTO equipe){
+    public String atualizarEquipe(@PathVariable int id, @RequestBody EquipeRequestDTO equipe) {
         return equipeService.atualizarPorId(id, equipe);
 
     }

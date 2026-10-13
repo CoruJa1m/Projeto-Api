@@ -2,7 +2,7 @@ package com.senac.br.api_projetos.service;
 
 import org.springframework.stereotype.Service;
 
-import com.senac.br.api_projetos.dto.desenvolvedor.EquipeRequestDTO;
+import com.senac.br.api_projetos.dto.equipe.EquipeRequestDTO;
 import com.senac.br.api_projetos.model.Equipe;
 import com.senac.br.api_projetos.repository.DesenvolvedorRepository;
 import com.senac.br.api_projetos.repository.EquipeRepository;

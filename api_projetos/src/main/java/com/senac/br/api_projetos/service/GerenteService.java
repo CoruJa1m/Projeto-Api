@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 
-import com.senac.br.api_projetos.dto.desenvolvedor.GerenteRequestDTO;
+import com.senac.br.api_projetos.dto.gerente.GerenteRequestDTO;
 import com.senac.br.api_projetos.model.GerenteProjeto;
 import com.senac.br.api_projetos.repository.GerenteRepository;
 
