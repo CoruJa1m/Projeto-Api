@@ -3,8 +3,10 @@ package com.senac.br.api_projetos.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException.NotFound;
 
 import com.senac.br.api_projetos.dto.desenvolvedor.DesenvolvedorRequestDTO;
+import com.senac.br.api_projetos.dto.desenvolvedor.DesenvolvedorResponseDTO;
 import com.senac.br.api_projetos.model.Desenvolvedor;
 import com.senac.br.api_projetos.repository.DesenvolvedorRepository;
 
@@ -17,16 +19,17 @@ public class DesenvolvedorService {
         this.desenvolvedorRepository = desenvolvedorRepository;
     }
 
-    public String salvar(DesenvolvedorRequestDTO desenvolvedor) {
+    public DesenvolvedorResponseDTO salvar(DesenvolvedorRequestDTO request) {
         Desenvolvedor novoDesenvoveldor = new Desenvolvedor();
-        novoDesenvoveldor.setNome(desenvolvedor.nome());
-        novoDesenvoveldor.setEmail(desenvolvedor.email());
-        novoDesenvoveldor.setSalario(desenvolvedor.salario());
-        novoDesenvoveldor.setCargo(desenvolvedor.cargo());
-        novoDesenvoveldor.setSenioridade(desenvolvedor.senioridade());
+        novoDesenvoveldor.setNome(request.nome());
+        novoDesenvoveldor.setEmail(request.email());
+        novoDesenvoveldor.setSalario(request.salario());
+        novoDesenvoveldor.setCargo(request.cargo());
+        novoDesenvoveldor.setSenioridade(request.senioridade());
 
-        desenvolvedorRepository.save(novoDesenvoveldor);
-        return "Desenvolvedor salvo com sucesso";
+        Desenvolvedor devSalvo = desenvolvedorRepository.save(novoDesenvoveldor);
+
+        return toResponse(devSalvo);
     }
 
     public String deletar(int id) {
@@ -38,48 +41,41 @@ public class DesenvolvedorService {
         }
     }
 
-    public String listar() {
-        List<Desenvolvedor> desenvolvedores = desenvolvedorRepository.findAll();
-
-        if (!desenvolvedores.isEmpty()) {
-            StringBuilder sb = new StringBuilder("Lista de Desenvolvedores:\n");
-            for (Desenvolvedor desenvolvedor : desenvolvedores) {
-                sb.append("Nome: " + desenvolvedor.getNome());
-                sb.append("\nEmail: " + desenvolvedor.getEmail());
-                sb.append("\nSalario: " + desenvolvedor.getSalario());
-                sb.append("\nCargo: " + desenvolvedor.getCargo());
-                sb.append("\nSenioridade: " + desenvolvedor.getSenioridade().toString().toLowerCase() + "\n");
-            }
-
-            return sb.toString();
-        } else {
-            return "Sem dados cadastrados...";
-        }
+    public List<DesenvolvedorResponseDTO> listar() {
+        return desenvolvedorRepository.findAll().stream()
+                .map(this::toResponse)
+                .toList();
     }
 
-    public String buscarPorId(int id) {
-        Desenvolvedor desenvolvedorExistente = desenvolvedorRepository.findById(id).get();
-
-        if (desenvolvedorRepository.existsById(id)) {
-            return desenvolvedorExistente.toString();
-        } else {
-            return "Desenvolvedor não encontrado";
-        }
+    public DesenvolvedorResponseDTO buscarPorId(int id) {
+        return toResponse(buscarEntidadePorId(id));
     }
 
-    public String atualizarPorId(int id, DesenvolvedorRequestDTO desenvolvedorAtualizado) {
-        if (desenvolvedorRepository.existsById(id)) {
-            Desenvolvedor devAntigo = new Desenvolvedor();
-            devAntigo.setNome(desenvolvedorAtualizado.nome());
-            devAntigo.setSalario(desenvolvedorAtualizado.salario());
-            devAntigo.setEmail(desenvolvedorAtualizado.email());
-            devAntigo.setCargo(desenvolvedorAtualizado.cargo());
-            devAntigo.setSenioridade(desenvolvedorAtualizado.senioridade());
+    public DesenvolvedorResponseDTO atualizarPorId(int id, DesenvolvedorRequestDTO request) {
+        Desenvolvedor devAntigo = buscarEntidadePorId(id);
 
-            desenvolvedorRepository.save(devAntigo);
-            return "Atualização conculida com sucesso";
-        } else {
-            return "Erro ao atualizar desenvolvedor...";
-        }
+        devAntigo.setNome(request.nome());
+        devAntigo.setSalario(request.salario());
+        devAntigo.setEmail(request.email());
+        devAntigo.setCargo(request.cargo());
+        devAntigo.setSenioridade(request.senioridade());
+
+        Desenvolvedor devSalvo = desenvolvedorRepository.save(devAntigo);
+
+        return toResponse(devSalvo);
+    }
+
+    private DesenvolvedorResponseDTO toResponse(Desenvolvedor desenvolvedor) {
+        return new DesenvolvedorResponseDTO(
+                desenvolvedor.getNome(),
+                desenvolvedor.getSalario(),
+                desenvolvedor.getEmail(),
+                desenvolvedor.getCargo(),
+                desenvolvedor.getSenioridade());
+    }
+
+    public Desenvolvedor buscarEntidadePorId(int id) {
+        return desenvolvedorRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("Desenvolvedor com o id " + id + " não foi encontrado."));
     }
 }

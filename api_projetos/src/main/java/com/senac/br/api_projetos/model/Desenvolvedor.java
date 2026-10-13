@@ -35,7 +35,6 @@ public class Desenvolvedor extends Funcionario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "Cargo não pode estar vazio")
     private String cargo;
 
     @Enumerated(EnumType.STRING)
