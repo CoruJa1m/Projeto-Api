@@ -1,5 +1,7 @@
 package com.senac.br.api_projetos.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.senac.br.api_projetos.dto.gerente.GerenteRequestDTO;
+import com.senac.br.api_projetos.dto.gerente.GerenteResponseDTO;
 import com.senac.br.api_projetos.service.GerenteService;
 
 @RestController
@@ -23,7 +26,7 @@ public class GerenteController {
     }
 
     @PostMapping("/salvarGerente")
-    public String cadastrarGerente(@RequestBody GerenteRequestDTO gerente) {
+    public GerenteResponseDTO cadastrarGerente(@RequestBody GerenteRequestDTO gerente) {
         return gerenteService.salvar(gerente);
     }
 
@@ -33,17 +36,17 @@ public class GerenteController {
     }
 
     @GetMapping("/listarGerente/{id}")
-    public String listarGerente(@PathVariable int id) {
+    public List<GerenteResponseDTO> listarGerente() {
         return gerenteService.listar();
     }
 
     @GetMapping("/buscarGerente/{id}")
-    public String buscarGerente(@PathVariable int id) {
+    public GerenteResponseDTO buscarGerentePorId(@PathVariable int id) {
         return gerenteService.buscarPorid(id);
     }
 
     @PutMapping("/atualizarGerente/{id}")
-    public String atualizarGerente(@PathVariable int id, @RequestBody GerenteRequestDTO gerente) {
-        return gerenteService.atualizarPorId(id, gerente);
+    public GerenteResponseDTO atualizarGerente(@PathVariable int id, @RequestBody GerenteRequestDTO request) {
+        return gerenteService.atualizarPorId(id, request);
     }
 }
