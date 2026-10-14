@@ -84,7 +84,7 @@ public class EquipeService {
 
     private Equipe buscarEntidadePorId(int id) {
         return equipeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new IllegalArgumentException("Equipe com o id " + id + " não foi encontrado."));
     }
 
 }

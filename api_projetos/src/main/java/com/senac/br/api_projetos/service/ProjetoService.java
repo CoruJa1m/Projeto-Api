@@ -2,6 +2,7 @@ package com.senac.br.api_projetos.service;
 
 import org.springframework.stereotype.Service;
 
+import com.senac.br.api_projetos.dto.projeto.ProjetoResponseDTO;
 import com.senac.br.api_projetos.model.Projeto;
 import com.senac.br.api_projetos.repository.ProjetoRepository;
 
@@ -14,26 +15,32 @@ public class ProjetoService {
         this.projetoRepository = projetoRepository;
     }
 
-
     public String salvar(Projeto projeto) {
         projetoRepository.save(projeto);
         return "Projeto salvo com sucesso";
     }
 
-
-    public String deletar(int id){
+    public String deletar(int id) {
         if (projetoRepository.existsById(id)) {
             projetoRepository.deleteById(id);
             return "Projeto deletado com sucesso";
-        }else{
+        } else {
             return "Projeto não encontrado, verifique novamente!!";
         }
     }
 
-    
+    private Projeto buscarEntidarPorId(int id) {
+        return projetoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Projeto com o id " + id + " não foi encontrado."));
+    }
 
-
-
-
+    private ProjetoResponseDTO toResponse(Projeto projeto) {
+        return new ProjetoResponseDTO(
+                projeto.getId(),
+                projeto.getNome(),
+                projeto.getAtivo(),
+                projeto.getPrazo(),
+                projeto.getQuadros());
+    }
 
 }

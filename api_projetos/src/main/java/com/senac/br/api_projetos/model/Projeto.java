@@ -9,8 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,12 +25,10 @@ public class Projeto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "Nome não pode estar vazio")
     private String nome;
 
     private Boolean ativo = true;
 
-    @NotNull(message = "Projeto precisa de um prazo")
     private LocalDateTime prazo;
 
     @OneToMany(mappedBy = "projeto")
