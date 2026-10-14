@@ -10,8 +10,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,7 +20,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString 
+@ToString
 public class Equipe {
 
     @Id
@@ -31,11 +29,9 @@ public class Equipe {
 
     @OneToOne
     @JoinColumn(name = "gerente_id", nullable = false)
-    @NotNull(message = "Equipe precisa de um gerente")
     private GerenteProjeto gerente;
 
     @OneToMany(mappedBy = "equipe")
-    @NotEmpty(message = "Precisa ter pelo menos um desenvolvedor")
     private List<Desenvolvedor> desenvolvedores = new ArrayList<>();
 
 }

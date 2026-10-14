@@ -12,20 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.senac.br.api_projetos.dto.desenvolvedor.DesenvolvedorRequestDTO;
 import com.senac.br.api_projetos.dto.desenvolvedor.DesenvolvedorResponseDTO;
 import com.senac.br.api_projetos.service.DesenvolvedorService;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/desenvolvedor")
+@RequiredArgsConstructor
 public class DesenvolvedorController {
 
     private final DesenvolvedorService desenvolvedorService;
 
-    public DesenvolvedorController(DesenvolvedorService desenvolvedorService) {
-        this.desenvolvedorService = desenvolvedorService;
-
-    }
-
-    @PostMapping("/salvar")
+    @PostMapping
     public DesenvolvedorResponseDTO cadastrarDesenvolvedor(@RequestBody DesenvolvedorRequestDTO desenvolvedor) {
         return desenvolvedorService.salvar(desenvolvedor);
     }
@@ -35,17 +34,17 @@ public class DesenvolvedorController {
         return desenvolvedorService.deletar(id);
     }
 
-    @GetMapping("/listar")
+    @GetMapping
     public List<DesenvolvedorResponseDTO> listarDesenvolvedor() {
         return desenvolvedorService.listar();
     }
 
-    @GetMapping("/buscarPorId/{id}")
+    @GetMapping("/{id}")
     public DesenvolvedorResponseDTO buscarDesenvolvedorPorId(@PathVariable int id) {
         return desenvolvedorService.buscarPorId(id);
     }
 
-    @PutMapping("path/{id}")
+    @PutMapping("/atualizar/{id}")
     public DesenvolvedorResponseDTO atualizarDesenvolvedorPorId(@PathVariable int id,
             @RequestBody DesenvolvedorRequestDTO request) {
         return desenvolvedorService.atualizarPorId(id, request);
