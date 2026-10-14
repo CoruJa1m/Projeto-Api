@@ -23,7 +23,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString 
+@ToString
 public class QuadroProjeto {
 
     @Id
