@@ -13,16 +13,17 @@ import com.senac.br.api_projetos.dto.desenvolvedor.DesenvolvedorRequestDTO;
 import com.senac.br.api_projetos.dto.desenvolvedor.DesenvolvedorResponseDTO;
 import com.senac.br.api_projetos.service.DesenvolvedorService;
 
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/desenvolvedor")
-@RequiredArgsConstructor
 public class DesenvolvedorController {
 
     private final DesenvolvedorService desenvolvedorService;
+
+    public DesenvolvedorController(DesenvolvedorService desenvolvedorService) {
+        this.desenvolvedorService = desenvolvedorService;
+    }
 
     @PostMapping
     public DesenvolvedorResponseDTO cadastrarDesenvolvedor(@RequestBody DesenvolvedorRequestDTO desenvolvedor) {

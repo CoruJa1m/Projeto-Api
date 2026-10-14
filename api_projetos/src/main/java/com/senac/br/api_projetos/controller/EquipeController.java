@@ -15,14 +15,15 @@ import com.senac.br.api_projetos.dto.equipe.EquipeRequestDTO;
 import com.senac.br.api_projetos.dto.equipe.EquipeResponseDTO;
 import com.senac.br.api_projetos.service.EquipeService;
 
-import lombok.RequiredArgsConstructor;
-
 @RestController
 @RequestMapping("/equipe")
-@RequiredArgsConstructor
 public class EquipeController {
 
     private final EquipeService equipeService;
+
+    public EquipeController(EquipeService equipeService) {
+        this.equipeService = equipeService;
+    }
 
     @PostMapping
     public EquipeResponseDTO cadastrarEquipe(@RequestBody EquipeRequestDTO equipe) {

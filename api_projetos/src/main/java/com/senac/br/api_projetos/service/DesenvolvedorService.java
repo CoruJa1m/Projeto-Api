@@ -3,7 +3,6 @@ package com.senac.br.api_projetos.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException.NotFound;
 
 import com.senac.br.api_projetos.dto.desenvolvedor.DesenvolvedorRequestDTO;
 import com.senac.br.api_projetos.dto.desenvolvedor.DesenvolvedorResponseDTO;

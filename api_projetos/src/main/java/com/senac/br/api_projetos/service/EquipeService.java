@@ -1,7 +1,6 @@
 package com.senac.br.api_projetos.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -12,15 +11,19 @@ import com.senac.br.api_projetos.repository.DesenvolvedorRepository;
 import com.senac.br.api_projetos.repository.EquipeRepository;
 import com.senac.br.api_projetos.repository.GerenteRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class EquipeService {
 
     private final EquipeRepository equipeRepository;
     private final GerenteRepository gerenteRepository;
     private final DesenvolvedorRepository desenvolvedorRepository;
+
+    public EquipeService(EquipeRepository equipeRepository, GerenteRepository gerenteRepository,
+            DesenvolvedorRepository desenvolvedorRepository) {
+        this.equipeRepository = equipeRepository;
+        this.gerenteRepository = gerenteRepository;
+        this.desenvolvedorRepository = desenvolvedorRepository;
+    }
 
     public EquipeResponseDTO salvar(EquipeRequestDTO request) {
         Equipe equipe = new Equipe();
