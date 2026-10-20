@@ -23,7 +23,8 @@ public class QuadroProjetoService {
     private final EquipeRepository equipeRepository;
     private final AtividadeRepository atividadeRepository;
 
-    public QuadroProjetoService(QuadroProjetoRepository quadroProjetoRepository, ProjetoRepository projetoRepository,
+    public QuadroProjetoService(QuadroProjetoRepository quadroProjetoRepository,
+            ProjetoRepository projetoRepository,
             EquipeRepository equipeRepository, AtividadeRepository atividadeRepository) {
         this.quadroProjetoRepository = quadroProjetoRepository;
         this.projetoRepository = projetoRepository;
