@@ -15,6 +15,8 @@ import com.senac.br.api_projetos.dto.projeto.ProjetoRequestDTO;
 import com.senac.br.api_projetos.dto.projeto.ProjetoResponseDTO;
 import com.senac.br.api_projetos.service.ProjetoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/projeto")
 public class ProjetoController {
@@ -31,7 +33,7 @@ public class ProjetoController {
     }
 
     @PostMapping
-    public ProjetoResponseDTO cadastrarProjeto(@RequestBody ProjetoRequestDTO projeto) {
+    public ProjetoResponseDTO cadastrarProjeto(@RequestBody @Valid ProjetoRequestDTO projeto) {
         return projetoService.salvar(projeto);
     }
 
@@ -46,7 +48,8 @@ public class ProjetoController {
     }
 
     @PutMapping("/{id}")
-    public ProjetoResponseDTO atualizarProjetoPorId(@PathVariable int id, @RequestBody ProjetoRequestDTO request) {
+    public ProjetoResponseDTO atualizarProjetoPorId(@PathVariable int id,
+            @RequestBody @Valid ProjetoRequestDTO request) {
         return projetoService.atualizarPorId(id, request);
     }
 

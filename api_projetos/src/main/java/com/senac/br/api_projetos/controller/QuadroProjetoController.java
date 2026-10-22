@@ -43,13 +43,13 @@ public class QuadroProjetoController {
     }
 
     @PostMapping
-    public QuadroProjetoResponseDTO cadastrarQuadroProjeto(@Valid @RequestBody QuadroProjetoRequestDTO quadroProjeto) {
+    public QuadroProjetoResponseDTO cadastrarQuadroProjeto(@RequestBody @Valid QuadroProjetoRequestDTO quadroProjeto) {
         return quadroProjetoService.salvar(quadroProjeto);
     }
 
     @PutMapping("/{id}")
     public QuadroProjetoResponseDTO atualizarQuadroProjetoPorId(@PathVariable int id,
-            @RequestBody QuadroProjetoRequestDTO request) {
+            @RequestBody @Valid QuadroProjetoRequestDTO request) {
         return quadroProjetoService.atualizarPorId(id, request);
     }
 

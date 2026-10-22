@@ -13,6 +13,8 @@ import com.senac.br.api_projetos.dto.desenvolvedor.DesenvolvedorRequestDTO;
 import com.senac.br.api_projetos.dto.desenvolvedor.DesenvolvedorResponseDTO;
 import com.senac.br.api_projetos.service.DesenvolvedorService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
@@ -26,7 +28,7 @@ public class DesenvolvedorController {
     }
 
     @PostMapping
-    public DesenvolvedorResponseDTO cadastrarDesenvolvedor(@RequestBody DesenvolvedorRequestDTO desenvolvedor) {
+    public DesenvolvedorResponseDTO cadastrarDesenvolvedor(@RequestBody @Valid DesenvolvedorRequestDTO desenvolvedor) {
         return desenvolvedorService.salvar(desenvolvedor);
     }
 
@@ -47,7 +49,7 @@ public class DesenvolvedorController {
 
     @PutMapping("/{id}")
     public DesenvolvedorResponseDTO atualizarDesenvolvedorPorId(@PathVariable int id,
-            @RequestBody DesenvolvedorRequestDTO request) {
+            @RequestBody @Valid DesenvolvedorRequestDTO request) {
         return desenvolvedorService.atualizarPorId(id, request);
     }
 

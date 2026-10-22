@@ -15,6 +15,8 @@ import com.senac.br.api_projetos.dto.gerente.GerenteRequestDTO;
 import com.senac.br.api_projetos.dto.gerente.GerenteResponseDTO;
 import com.senac.br.api_projetos.service.GerenteService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/gerente")
 public class GerenteController {
@@ -26,7 +28,7 @@ public class GerenteController {
     }
 
     @PostMapping
-    public GerenteResponseDTO cadastrarGerente(@RequestBody GerenteRequestDTO gerente) {
+    public GerenteResponseDTO cadastrarGerente(@RequestBody @Valid GerenteRequestDTO gerente) {
         return gerenteService.salvar(gerente);
     }
 
@@ -46,7 +48,7 @@ public class GerenteController {
     }
 
     @PutMapping("/{id}")
-    public GerenteResponseDTO atualizarGerente(@PathVariable int id, @RequestBody GerenteRequestDTO request) {
+    public GerenteResponseDTO atualizarGerente(@PathVariable int id, @RequestBody @Valid GerenteRequestDTO request) {
         return gerenteService.atualizarPorId(id, request);
     }
 }

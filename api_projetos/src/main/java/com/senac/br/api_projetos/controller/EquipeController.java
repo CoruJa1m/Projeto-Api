@@ -15,6 +15,8 @@ import com.senac.br.api_projetos.dto.equipe.EquipeRequestDTO;
 import com.senac.br.api_projetos.dto.equipe.EquipeResponseDTO;
 import com.senac.br.api_projetos.service.EquipeService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/equipe")
 public class EquipeController {
@@ -26,7 +28,7 @@ public class EquipeController {
     }
 
     @PostMapping
-    public EquipeResponseDTO cadastrarEquipe(@RequestBody EquipeRequestDTO equipe) {
+    public EquipeResponseDTO cadastrarEquipe(@RequestBody @Valid EquipeRequestDTO equipe) {
         return equipeService.salvar(equipe);
     }
 
@@ -46,7 +48,7 @@ public class EquipeController {
     }
 
     @PutMapping("/{id}")
-    public EquipeResponseDTO atualizarEquipe(@PathVariable int id, @RequestBody EquipeRequestDTO equipe) {
+    public EquipeResponseDTO atualizarEquipe(@PathVariable int id, @RequestBody @Valid EquipeRequestDTO equipe) {
         return equipeService.atualizarPorId(id, equipe);
 
     }
