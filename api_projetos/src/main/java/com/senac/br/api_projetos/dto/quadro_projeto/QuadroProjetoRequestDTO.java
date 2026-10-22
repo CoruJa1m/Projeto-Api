@@ -2,16 +2,13 @@ package com.senac.br.api_projetos.dto.quadro_projeto;
 
 import java.util.List;
 
-import com.senac.br.api_projetos.model.Atividade;
-import com.senac.br.api_projetos.model.Equipe;
-import com.senac.br.api_projetos.model.Projeto;
-
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 
 public record QuadroProjetoRequestDTO(
 
-        @NotBlank(message = "Projeto não pode ser vazio") Integer idProjeto,
-        @NotBlank(message = "Equipe não pode estar vazia") Integer idEquipe,
-        @NotEmpty(message = "Atividade não pode estar vazia") List<Integer> idAtividades) {
+        @NotNull(message = "Projeto não pode ser vazio") @Positive(message = "O id do projeto deve ser positivo") Integer idProjeto,
+        @NotNull(message = "Equipe não pode estar vazia") @Positive(message = "O id da equipe deve ser positivo") Integer idEquipe,
+        @NotEmpty(message = "Atividade não pode estar vazia") List<@NotNull @Positive(message = "O id da atividade deve ser positivo") Integer> idAtividades) {
 }
