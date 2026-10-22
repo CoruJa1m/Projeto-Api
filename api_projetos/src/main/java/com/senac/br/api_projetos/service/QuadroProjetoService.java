@@ -33,28 +33,33 @@ public class QuadroProjetoService {
     }
 
     @Transactional
-    public QuadroProjetoResponseDTO salvar(QuadroProjetoRequestDTO request) {
-        var equipe = equipeRepository.findById(request.idEquipe())
-                .orElseThrow(() -> new IllegalArgumentException("Equipe não encontrada"));
-        var projeto = projetoRepository.findById(request.idProjeto())
-                .orElseThrow(() -> new IllegalArgumentException("Projeto não encontrado"));
-        Set<Integer> idsAtividades = Set.copyOf(request.idAtividades());
-        List<Atividade> atividades = atividadeRepository.findAllById(idsAtividades);
-        if (atividades.size() != idsAtividades.size()) {
-            throw new IllegalArgumentException("Uma ou mais atividades não foram encontradas");
-        }
-        QuadroProjeto novoQuadroProjeto = new QuadroProjeto();
-        novoQuadroProjeto.setEquipe(equipe);
-        novoQuadroProjeto.setProjeto(projeto);
-        novoQuadroProjeto.setAtividades(atividades);
+public QuadroProjetoResponseDTO salvar(QuadroProjetoRequestDTO request) {
+    QuadroProjeto novoQuadroProjeto = new QuadroProjeto();
 
-        QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(novoQuadroProjeto);
-        atividades.forEach(atividade -> atividade.setQuadroProjeto(quadroProjetoSalvo));
-        atividadeRepository.saveAll(atividades);
-        quadroProjetoSalvo.setAtividades(atividades);
-        return toResponse(quadroProjetoSalvo);
+    novoQuadroProjeto.setEquipe(
+        equipeRepository.findById(request.idEquipe())
+            .orElseThrow(() -> new IllegalArgumentException("Equipe não encontrada"))
+    );
 
-    }
+    novoQuadroProjeto.setProjeto(
+        projetoRepository.findById(request.idProjeto())
+            .orElseThrow(() -> new IllegalArgumentException("Projeto não encontrado"))
+    );
+
+    novoQuadroProjeto.setAtividades(
+        atividadeRepository.findAllById(request.idAtividades())
+    );
+
+    QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(novoQuadroProjeto);
+
+    quadroProjetoSalvo.getAtividades().forEach(
+        atividade -> atividade.setQuadroProjeto(quadroProjetoSalvo)
+    );
+
+    atividadeRepository.saveAll(quadroProjetoSalvo.getAtividades());
+
+    return toResponse(quadroProjetoSalvo);
+}
 
 
     public String deletar(int id) {

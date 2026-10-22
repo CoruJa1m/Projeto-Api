@@ -15,8 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,11 +35,10 @@ public class Atividade {
     @Enumerated(EnumType.STRING)
     private StatusAtividade status;
 
-    @NotBlank(message = "Atividade precisa de uma descrição")
+    
     private String descricao;
 
     @ManyToMany(mappedBy = "atividades")
-    @NotEmpty(message = "Essa atividade precisa de pelo menos um desenvolvedor atribuído")
     private List<Desenvolvedor> atribuidos = new ArrayList<>();
 
     @ManyToOne
