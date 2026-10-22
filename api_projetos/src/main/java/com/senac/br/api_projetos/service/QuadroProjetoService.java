@@ -1,7 +1,6 @@
 package com.senac.br.api_projetos.service;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,34 +32,34 @@ public class QuadroProjetoService {
     }
 
     @Transactional
-public QuadroProjetoResponseDTO salvar(QuadroProjetoRequestDTO request) {
-    QuadroProjeto novoQuadroProjeto = new QuadroProjeto();
+    public QuadroProjetoResponseDTO salvar(QuadroProjetoRequestDTO request) {
+        QuadroProjeto novoQuadroProjeto = new QuadroProjeto();
 
-    novoQuadroProjeto.setEquipe(
-        equipeRepository.findById(request.idEquipe())
-            .orElseThrow(() -> new IllegalArgumentException("Equipe não encontrada"))
-    );
+        novoQuadroProjeto.setEquipe(
+                equipeRepository.findById(request.idEquipe())
+                        .orElseThrow(() -> new IllegalArgumentException("Equipe não encontrada")));
 
-    novoQuadroProjeto.setProjeto(
-        projetoRepository.findById(request.idProjeto())
-            .orElseThrow(() -> new IllegalArgumentException("Projeto não encontrado"))
-    );
+        novoQuadroProjeto.setProjeto(
+                projetoRepository.findById(request.idProjeto())
+                        .orElseThrow(() -> new IllegalArgumentException("Projeto não encontrado")));
 
-    novoQuadroProjeto.setAtividades(
-        atividadeRepository.findAllById(request.idAtividades())
-    );
+        List<Atividade> atividades = atividadeRepository.findAllById(request.idAtividades());
 
-    QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(novoQuadroProjeto);
+        if (atividades.isEmpty()) {
+            throw new IllegalArgumentException("Atividades não encontradas");
+        }
 
-    quadroProjetoSalvo.getAtividades().forEach(
-        atividade -> atividade.setQuadroProjeto(quadroProjetoSalvo)
-    );
+        novoQuadroProjeto.setAtividades(atividades);
 
-    atividadeRepository.saveAll(quadroProjetoSalvo.getAtividades());
+        QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(novoQuadroProjeto);
 
-    return toResponse(quadroProjetoSalvo);
-}
+        quadroProjetoSalvo.getAtividades().forEach(
+                atividade -> atividade.setQuadroProjeto(quadroProjetoSalvo));
 
+        atividadeRepository.saveAll(quadroProjetoSalvo.getAtividades());
+
+        return toResponse(quadroProjetoSalvo);
+    }
 
     public String deletar(int id) {
         if (quadroProjetoRepository.existsById(id)) {
@@ -70,7 +69,6 @@ public QuadroProjetoResponseDTO salvar(QuadroProjetoRequestDTO request) {
             return "Quadro do projeto não encontrado, verifique novamente!!";
         }
     }
-
 
     public QuadroProjetoResponseDTO buscarPorId(int id) {
         return toResponse(buscarEntidarPorId(id));
@@ -96,22 +94,17 @@ public QuadroProjetoResponseDTO salvar(QuadroProjetoRequestDTO request) {
         return quadroProjetoRepository.findAll().stream().map(this::toResponse).toList();
     }
 
-
     public QuadroProjeto buscarEntidarPorId(int id) {
         return quadroProjetoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Quadro do projeto com o id " + id + " não foi encontrado."));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Quadro do projeto com o id " + id + " não foi encontrado."));
     }
 
-
-
-
-private QuadroProjetoResponseDTO toResponse(QuadroProjeto quadroProjeto) {
-    return new QuadroProjetoResponseDTO(
-            quadroProjeto.getProjeto(),
-            quadroProjeto.getEquipe(),
-            quadroProjeto.getAtividades()
-    );
-}
-
+    private QuadroProjetoResponseDTO toResponse(QuadroProjeto quadroProjeto) {
+        return new QuadroProjetoResponseDTO(
+                quadroProjeto.getProjeto(),
+                quadroProjeto.getEquipe(),
+                quadroProjeto.getAtividades());
+    }
 
 }

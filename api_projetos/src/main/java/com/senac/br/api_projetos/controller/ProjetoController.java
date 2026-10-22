@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.senac.br.api_projetos.dto.projeto.ProjetoRequestDTO;
 import com.senac.br.api_projetos.dto.projeto.ProjetoResponseDTO;
-import com.senac.br.api_projetos.model.Projeto;
 import com.senac.br.api_projetos.service.ProjetoService;
 
 @RestController
-@RequestMapping("/Projeto")
+@RequestMapping("/projeto")
 public class ProjetoController {
 
     private final ProjetoService projetoService;
@@ -26,12 +25,12 @@ public class ProjetoController {
         this.projetoService = projetoService;
     }
 
-    @DeleteMapping("/deletarProjeto/{id}")
+    @DeleteMapping("/{id}")
     public String deletarProjeto(@PathVariable int id) {
         return projetoService.deletar(id);
     }
 
-    @PostMapping("/salvarProjeto")
+    @PostMapping
     public ProjetoResponseDTO cadastrarProjeto(@RequestBody ProjetoRequestDTO projeto) {
         return projetoService.salvar(projeto);
     }
@@ -41,12 +40,12 @@ public class ProjetoController {
         return projetoService.buscarPorId(id);
     }
 
-    @GetMapping()
+    @GetMapping
     public List<ProjetoResponseDTO> listarProjetos() {
         return projetoService.listar();
     }
 
-    @PutMapping("/atualizar/{id}")
+    @PutMapping("/{id}")
     public ProjetoResponseDTO atualizarProjetoPorId(@PathVariable int id, @RequestBody ProjetoRequestDTO request) {
         return projetoService.atualizarPorId(id, request);
     }

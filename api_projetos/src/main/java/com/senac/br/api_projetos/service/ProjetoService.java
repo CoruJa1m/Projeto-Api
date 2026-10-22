@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import com.senac.br.api_projetos.dto.projeto.ProjetoRequestDTO;
 import com.senac.br.api_projetos.dto.projeto.ProjetoResponseDTO;
 import com.senac.br.api_projetos.model.Projeto;
-import com.senac.br.api_projetos.model.QuadroProjeto;
 import com.senac.br.api_projetos.repository.ProjetoRepository;
 import com.senac.br.api_projetos.repository.QuadroProjetoRepository;
 

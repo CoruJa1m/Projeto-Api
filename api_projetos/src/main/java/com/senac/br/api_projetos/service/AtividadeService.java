@@ -15,12 +15,12 @@ public class AtividadeService {
     private final DesenvolvedorRepository desenvolvedorRepository;
     private final QuadroProjetoRepository quadroProjetoRepository;
 
-    public AtividadeService(AtividadeRepository atividadeRepository, DesenvolvedorRepository desenvolvedorRepository, QuadroProjetoRepository quadroProjetoRepository) {
+    public AtividadeService(AtividadeRepository atividadeRepository, DesenvolvedorRepository desenvolvedorRepository,
+            QuadroProjetoRepository quadroProjetoRepository) {
         this.atividadeRepository = atividadeRepository;
         this.desenvolvedorRepository = desenvolvedorRepository;
         this.quadroProjetoRepository = quadroProjetoRepository;
     }
-
 
     public String deletar(int id) {
         if (atividadeRepository.existsById(id)) {
@@ -31,7 +31,6 @@ public class AtividadeService {
         }
     }
 
-
     public AtividadeResponseDTO salvar(Atividade atividade) {
         Atividade atividadeNova = new Atividade();
         atividadeNova.setDescricao(atividade.getDescricao());
@@ -40,31 +39,26 @@ public class AtividadeService {
         return toResponse(atividadeSalva);
     }
 
-
     public AtividadeResponseDTO buscarPorId(int id) {
         return toResponse(buscarEntidadePorId(id));
     }
 
-   
-private  AtividadeResponseDTO toResponse(Atividade atividade) {
-    return new AtividadeResponseDTO(
-        atividade.getId(),
-        atividade.getDescricao(),
-        atividade.getStatus(),
-        atividade.getQuadroProjeto().getId(),
-        atividade.getAtribuidos()
-            .stream()
-            .map(desenvolvedor -> desenvolvedor.getId())
-            .toList()
-    );
-}
+    private AtividadeResponseDTO toResponse(Atividade atividade) {
+        return new AtividadeResponseDTO(
+                atividade.getId(),
+                atividade.getDescricao(),
+                atividade.getStatus(),
+                atividade.getQuadroProjeto().getId(),
+                atividade.getAtribuidos()
+                        .stream()
+                        .map(desenvolvedor -> desenvolvedor.getId())
+                        .toList());
+    }
 
-
-    public Atividade buscarEntidadePorId(int id){
+    public Atividade buscarEntidadePorId(int id) {
         return atividadeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Atividade não encontrada"));
-    
-}
 
+    }
 
 }

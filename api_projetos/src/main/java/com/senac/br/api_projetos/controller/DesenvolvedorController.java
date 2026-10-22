@@ -30,7 +30,7 @@ public class DesenvolvedorController {
         return desenvolvedorService.salvar(desenvolvedor);
     }
 
-    @DeleteMapping("/deletar/{id}")
+    @DeleteMapping("/{id}")
     public String deletarDesenvolvedor(@PathVariable int id) {
         return desenvolvedorService.deletar(id);
     }
@@ -45,7 +45,7 @@ public class DesenvolvedorController {
         return desenvolvedorService.buscarPorId(id);
     }
 
-    @PutMapping("/atualizar/{id}")
+    @PutMapping("/{id}")
     public DesenvolvedorResponseDTO atualizarDesenvolvedorPorId(@PathVariable int id,
             @RequestBody DesenvolvedorRequestDTO request) {
         return desenvolvedorService.atualizarPorId(id, request);

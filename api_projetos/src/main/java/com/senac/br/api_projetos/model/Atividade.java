@@ -25,7 +25,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString 
+@ToString
 public class Atividade {
 
     @Id
@@ -35,7 +35,6 @@ public class Atividade {
     @Enumerated(EnumType.STRING)
     private StatusAtividade status;
 
-    
     private String descricao;
 
     @ManyToMany(mappedBy = "atividades")

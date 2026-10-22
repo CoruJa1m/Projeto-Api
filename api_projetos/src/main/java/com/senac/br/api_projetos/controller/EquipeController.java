@@ -30,7 +30,7 @@ public class EquipeController {
         return equipeService.salvar(equipe);
     }
 
-    @DeleteMapping("/deletar/{id}")
+    @DeleteMapping("/{id}")
     public String deletarEquipe(@PathVariable int id) {
         return equipeService.deletar(id);
     }

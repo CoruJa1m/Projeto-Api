@@ -16,7 +16,7 @@ import com.senac.br.api_projetos.dto.gerente.GerenteResponseDTO;
 import com.senac.br.api_projetos.service.GerenteService;
 
 @RestController
-@RequestMapping("/Gerente")
+@RequestMapping("/gerente")
 public class GerenteController {
 
     private final GerenteService gerenteService;
@@ -25,27 +25,27 @@ public class GerenteController {
         this.gerenteService = gerenteService;
     }
 
-    @PostMapping("/salvarGerente")
+    @PostMapping
     public GerenteResponseDTO cadastrarGerente(@RequestBody GerenteRequestDTO gerente) {
         return gerenteService.salvar(gerente);
     }
 
-    @DeleteMapping("/deletarGerente/{id}")
+    @DeleteMapping("/{id}")
     public String deletarGerente(@PathVariable int id) {
         return gerenteService.deletar(id);
     }
 
-    @GetMapping("/listarGerente/{id}")
+    @GetMapping
     public List<GerenteResponseDTO> listarGerente() {
         return gerenteService.listar();
     }
 
-    @GetMapping("/buscarGerente/{id}")
+    @GetMapping("/{id}")
     public GerenteResponseDTO buscarGerentePorId(@PathVariable int id) {
         return gerenteService.buscarPorid(id);
     }
 
-    @PutMapping("/atualizarGerente/{id}")
+    @PutMapping("/{id}")
     public GerenteResponseDTO atualizarGerente(@PathVariable int id, @RequestBody GerenteRequestDTO request) {
         return gerenteService.atualizarPorId(id, request);
     }
