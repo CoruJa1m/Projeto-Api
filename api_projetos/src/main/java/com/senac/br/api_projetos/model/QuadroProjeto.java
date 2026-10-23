@@ -35,10 +35,6 @@ public class QuadroProjeto {
     @NotNull(message = "Este quadro precisa de um projeto associado")
     private Projeto projeto;
 
-    @OneToOne
-    @JoinColumn(name = "equipe_id", nullable = false)
-    @NotNull(message = "Este quadro precisa de uma equipe associada")
-    private Equipe equipe;
 
     @OneToMany(mappedBy = "quadroProjeto")
     private List<Atividade> atividades = new ArrayList<>();

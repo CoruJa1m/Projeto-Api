@@ -35,9 +35,8 @@ public class QuadroProjetoService {
     public QuadroProjetoResponseDTO salvar(QuadroProjetoRequestDTO request) {
         QuadroProjeto novoQuadroProjeto = new QuadroProjeto();
 
-        novoQuadroProjeto.setEquipe(
-                equipeRepository.findById(request.idEquipe())
-                        .orElseThrow(() -> new IllegalArgumentException("Equipe não encontrada")));
+        novoQuadroProjeto.setProjeto(projetoRepository.findById(request.idEquipe())
+                .orElseThrow(() -> new RuntimeException("Projeto não encontrado")));
 
         novoQuadroProjeto.setProjeto(
                 projetoRepository.findById(request.idProjeto())
@@ -77,8 +76,8 @@ public class QuadroProjetoService {
     public QuadroProjetoResponseDTO atualizarPorId(int id, QuadroProjetoRequestDTO request) {
         QuadroProjeto quadroProjetoAntigo = buscarEntidarPorId(id);
 
-        quadroProjetoAntigo.setEquipe(equipeRepository.findById(request.idEquipe())
-                .orElseThrow(() -> new RuntimeException("Equipe não encontrada")));
+        quadroProjetoAntigo.setProjeto(projetoRepository.findById(request.idEquipe())
+                .orElseThrow(() -> new RuntimeException("Projeto não encontrado")));
 
         quadroProjetoAntigo.setProjeto(projetoRepository.findById(request.idProjeto())
                 .orElseThrow(() -> new RuntimeException("Projeto não encontrado")));
@@ -103,7 +102,7 @@ public class QuadroProjetoService {
     private QuadroProjetoResponseDTO toResponse(QuadroProjeto quadroProjeto) {
         return new QuadroProjetoResponseDTO(
                 quadroProjeto.getProjeto(),
-                quadroProjeto.getEquipe(),
+                quadroProjeto.getProjeto().getEquipe(),
                 quadroProjeto.getAtividades());
     }
 
