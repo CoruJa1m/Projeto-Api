@@ -64,8 +64,13 @@ public class GerenteService {
     }
 
     private GerenteResponseDTO toResponse(GerenteProjeto gerenteProjeto) {
-        return new GerenteResponseDTO(gerenteProjeto.getNome(), gerenteProjeto.getSalario(), gerenteProjeto.getEmail(),
-                gerenteProjeto.getCertificacoes());
+        return new GerenteResponseDTO(
+            gerenteProjeto.getId(),
+            gerenteProjeto.getNome(),
+            gerenteProjeto.getSalario(),
+            gerenteProjeto.getEmail(),
+            gerenteProjeto.getCertificacoes()
+        );
     }
 
     private GerenteProjeto buscarEntidadePorId(int id) {

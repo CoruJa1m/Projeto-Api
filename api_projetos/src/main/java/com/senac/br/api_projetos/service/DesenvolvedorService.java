@@ -66,6 +66,7 @@ public class DesenvolvedorService {
 
     private DesenvolvedorResponseDTO toResponse(Desenvolvedor desenvolvedor) {
         return new DesenvolvedorResponseDTO(
+                desenvolvedor.getId(),
                 desenvolvedor.getNome(),
                 desenvolvedor.getSalario(),
                 desenvolvedor.getEmail(),

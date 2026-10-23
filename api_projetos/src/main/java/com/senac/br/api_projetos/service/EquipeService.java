@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.senac.br.api_projetos.dto.equipe.EquipeRequestDTO;
 import com.senac.br.api_projetos.dto.equipe.EquipeResponseDTO;
+import com.senac.br.api_projetos.model.Desenvolvedor;
 import com.senac.br.api_projetos.model.Equipe;
 import com.senac.br.api_projetos.repository.DesenvolvedorRepository;
 import com.senac.br.api_projetos.repository.EquipeRepository;
@@ -75,12 +76,15 @@ public class EquipeService {
         return toResponse(equipeSalva);
     }
 
-    private EquipeResponseDTO toResponse(Equipe equipe) {
-        return new EquipeResponseDTO(
-                equipe.getId(),
-                equipe.getGerente(),
-                equipe.getDesenvolvedores());
-    }
+ private EquipeResponseDTO toResponse(Equipe equipe) {
+    return new EquipeResponseDTO(
+        equipe.getId(),
+        equipe.getGerente().getId(),
+        equipe.getDesenvolvedores().stream()
+            .map(Desenvolvedor::getId)
+            .toList()
+    );
+}
 
     private Equipe buscarEntidadePorId(int id) {
         return equipeRepository.findById(id)

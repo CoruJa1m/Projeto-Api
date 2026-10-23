@@ -2,12 +2,9 @@ package com.senac.br.api_projetos.dto.equipe;
 
 import java.util.List;
 
-import com.senac.br.api_projetos.model.Desenvolvedor;
-import com.senac.br.api_projetos.model.GerenteProjeto;
-
 public record EquipeResponseDTO(
-                Integer id,
-                GerenteProjeto gerenteProjeto,
-                List<Desenvolvedor> desenvolvedors) {
+        Integer id,
+        Integer idGerente,
+        List<Integer> idDesenvolvedores) {
 
 }

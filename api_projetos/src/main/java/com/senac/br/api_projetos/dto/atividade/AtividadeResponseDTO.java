@@ -5,7 +5,7 @@ import java.util.List;
 import com.senac.br.api_projetos.model.enums.StatusAtividade;
 
 public record AtividadeResponseDTO(
-    Integer idAtividade,
+    Integer id,
     String descricao,
     StatusAtividade status,
     Integer idQuadroProjeto,

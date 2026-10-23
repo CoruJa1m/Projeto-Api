@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public record GerenteResponseDTO(
+        Integer id,
         String nome,
         BigDecimal salario,
         String email,

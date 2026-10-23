@@ -101,9 +101,11 @@ QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(novoQuadroProjet
 
     private QuadroProjetoResponseDTO toResponse(QuadroProjeto quadroProjeto) {
         return new QuadroProjetoResponseDTO(
-                quadroProjeto.getProjeto(),
-                quadroProjeto.getProjeto().getEquipe(),
-                quadroProjeto.getAtividades());
+                quadroProjeto.getId(),
+                quadroProjeto.getProjeto().getId(),
+                quadroProjeto.getAtividades().stream()
+                        .map(Atividade::getId)
+                        .toList());
     }
 
 }
