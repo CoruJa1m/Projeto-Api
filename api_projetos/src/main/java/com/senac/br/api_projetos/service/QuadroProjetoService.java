@@ -35,7 +35,7 @@ public class QuadroProjetoService {
     public QuadroProjetoResponseDTO salvar(QuadroProjetoRequestDTO request) {
         QuadroProjeto novoQuadroProjeto = new QuadroProjeto();
 
-        novoQuadroProjeto.setProjeto(projetoRepository.findById(request.idEquipe())
+        /*novoQuadroProjeto.setProjeto(projetoRepository.findById(request.idEquipe())
                 .orElseThrow(() -> new RuntimeException("Projeto não encontrado")));
 
         novoQuadroProjeto.setProjeto(
@@ -50,10 +50,10 @@ public class QuadroProjetoService {
 
         novoQuadroProjeto.setAtividades(atividades);
 
-        QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(novoQuadroProjeto);
-
+        
         quadroProjetoSalvo.getAtividades().forEach(
-                atividade -> atividade.setQuadroProjeto(quadroProjetoSalvo));
+                atividade -> atividade.setQuadroProjeto(quadroProjetoSalvo));/* */
+QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(novoQuadroProjeto);
 
         atividadeRepository.saveAll(quadroProjetoSalvo.getAtividades());
 
@@ -76,13 +76,13 @@ public class QuadroProjetoService {
     public QuadroProjetoResponseDTO atualizarPorId(int id, QuadroProjetoRequestDTO request) {
         QuadroProjeto quadroProjetoAntigo = buscarEntidarPorId(id);
 
-        quadroProjetoAntigo.setProjeto(projetoRepository.findById(request.idEquipe())
-                .orElseThrow(() -> new RuntimeException("Projeto não encontrado")));
+        //quadroProjetoAntigo.setProjeto(projetoRepository.findById(request.idEquipe())
+        //        .orElseThrow(() -> new RuntimeException("Projeto não encontrado")));
 
         quadroProjetoAntigo.setProjeto(projetoRepository.findById(request.idProjeto())
                 .orElseThrow(() -> new RuntimeException("Projeto não encontrado")));
 
-        quadroProjetoAntigo.setAtividades(atividadeRepository.findAllById(request.idAtividades()));
+        //quadroProjetoAntigo.setAtividades(atividadeRepository.findAllById(request.idAtividades()));
 
         QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(quadroProjetoAntigo);
         return toResponse(quadroProjetoSalvo);

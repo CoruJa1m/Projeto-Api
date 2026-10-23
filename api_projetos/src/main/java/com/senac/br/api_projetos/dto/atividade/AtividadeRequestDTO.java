@@ -7,18 +7,17 @@ import com.senac.br.api_projetos.model.enums.StatusAtividade;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public record AtividadeRequestDTO(
 
-                @NotNull(message = "O id da atividade não pode ser nulo") Integer idAtividade,
+        @NotBlank(message = "Descrição não pode estar vazia") String descricao,
 
-                @NotBlank(message = "Descrição não pode estar vazia") String descricao,
+        @NotNull(message = "Status é obrigatório") StatusAtividade status,
 
-                @NotNull(message = "Status é obrigatório") StatusAtividade status,
+        @NotNull(message = "Quadro do projeto é obrigatório") Integer idQuadroProjeto,
 
-                @NotNull(message = "Quadro do projeto é obrigatório") Integer idQuadroProjeto,
-
-                @NotEmpty(message = "Informe ao menos um desenvolvedor") List<Integer> idDesenvolvedores
+        @NotEmpty(message = "Informe ao menos um desenvolvedor") List<@NotNull @Positive Integer> idDesenvolvedores
 
 ) {
 
