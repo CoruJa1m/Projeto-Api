@@ -70,7 +70,7 @@ public class ProjetoService {
                 projeto.getQuadros());
     }
 
-    public Projeto buscarEntidarPorId(int id) {
+    private Projeto buscarEntidarPorId(int id) {
         return projetoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Projeto com o id " + id + " não foi encontrado."));
     }

@@ -73,7 +73,7 @@ public class DesenvolvedorService {
                 desenvolvedor.getSenioridade());
     }
 
-    public Desenvolvedor buscarEntidadePorId(int id) {
+    private Desenvolvedor buscarEntidadePorId(int id) {
         return desenvolvedorRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("Desenvolvedor com o id " + id + " não foi encontrado."));
     }

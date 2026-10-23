@@ -55,7 +55,7 @@ public class AtividadeService {
                         .toList());
     }
 
-    public Atividade buscarEntidadePorId(int id) {
+    private Atividade buscarEntidadePorId(int id) {
         return atividadeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Atividade não encontrada"));
 

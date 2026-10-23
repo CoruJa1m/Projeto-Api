@@ -94,7 +94,7 @@ public class QuadroProjetoService {
         return quadroProjetoRepository.findAll().stream().map(this::toResponse).toList();
     }
 
-    public QuadroProjeto buscarEntidarPorId(int id) {
+    private QuadroProjeto buscarEntidarPorId(int id) {
         return quadroProjetoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Quadro do projeto com o id " + id + " não foi encontrado."));

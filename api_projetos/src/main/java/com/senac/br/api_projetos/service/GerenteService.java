@@ -68,7 +68,7 @@ public class GerenteService {
                 gerenteProjeto.getCertificacoes());
     }
 
-    public GerenteProjeto buscarEntidadePorId(int id) {
+    private GerenteProjeto buscarEntidadePorId(int id) {
         return gerenteRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("Desenvolvedor com o id " + id + " não foi encontrado."));
     }
