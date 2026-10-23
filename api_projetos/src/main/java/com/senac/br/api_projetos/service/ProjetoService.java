@@ -8,17 +8,14 @@ import com.senac.br.api_projetos.dto.projeto.ProjetoRequestDTO;
 import com.senac.br.api_projetos.dto.projeto.ProjetoResponseDTO;
 import com.senac.br.api_projetos.model.Projeto;
 import com.senac.br.api_projetos.repository.ProjetoRepository;
-import com.senac.br.api_projetos.repository.QuadroProjetoRepository;
 
 @Service
 public class ProjetoService {
 
     private final ProjetoRepository projetoRepository;
-    private final QuadroProjetoRepository quadroProjetoRepository;
 
-    public ProjetoService(ProjetoRepository projetoRepository, QuadroProjetoRepository quadroProjetoRepository) {
+    public ProjetoService(ProjetoRepository projetoRepository) {
         this.projetoRepository = projetoRepository;
-        this.quadroProjetoRepository = quadroProjetoRepository;
     }
 
     public ProjetoResponseDTO salvar(ProjetoRequestDTO request) {
@@ -26,7 +23,6 @@ public class ProjetoService {
 
         novoProjeto.setNome(request.nome());
         novoProjeto.setPrazo(request.prazo());
-        novoProjeto.setQuadros(quadroProjetoRepository.findAllById(request.idQuadroProjetos()));
 
         Projeto projetoSalvo = projetoRepository.save(novoProjeto);
         return toResponse(projetoSalvo);
@@ -50,8 +46,6 @@ public class ProjetoService {
 
         projetoAntigo.setNome(request.nome());
         projetoAntigo.setPrazo(request.prazo());
-        projetoAntigo.setQuadros(quadroProjetoRepository.findAllById(request.idQuadroProjetos()));
-
         Projeto projetoSalvo = projetoRepository.save(projetoAntigo);
         return toResponse(projetoSalvo);
 

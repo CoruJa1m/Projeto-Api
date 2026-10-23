@@ -2,6 +2,7 @@ package com.senac.br.api_projetos.service;
 
 import org.springframework.stereotype.Service;
 
+import com.senac.br.api_projetos.dto.atividade.AtividadeRequestDTO;
 import com.senac.br.api_projetos.dto.atividade.AtividadeResponseDTO;
 import com.senac.br.api_projetos.model.Atividade;
 import com.senac.br.api_projetos.repository.AtividadeRepository;
@@ -31,10 +32,18 @@ public class AtividadeService {
         }
     }
 
-    public AtividadeResponseDTO salvar(Atividade atividade) {
+    public AtividadeResponseDTO salvar(AtividadeRequestDTO request) {
         Atividade atividadeNova = new Atividade();
-        atividadeNova.setDescricao(atividade.getDescricao());
-        atividadeNova.setStatus(atividade.getStatus());
+        atividadeNova.setDescricao(request.descricao());
+        atividadeNova.setStatus(request.status());
+        atividadeNova.setQuadroProjeto(quadroProjetoRepository.findById(request.idQuadroProjeto())
+                .orElseThrow(() -> new IllegalArgumentException("Quadro de projeto não encontrado, favor verificar")));
+
+        atividadeNova.setAtribuidos(desenvolvedorRepository.findAllById(request.idDesenvolvedores()));
+        if (atividadeNova.getAtribuidos().isEmpty()) {
+            throw new IllegalArgumentException("nenhum desenvolvedor cadastrado ou desenvolvedores nao encontrado");
+        }
+
         Atividade atividadeSalva = atividadeRepository.save(atividadeNova);
         return toResponse(atividadeSalva);
     }
