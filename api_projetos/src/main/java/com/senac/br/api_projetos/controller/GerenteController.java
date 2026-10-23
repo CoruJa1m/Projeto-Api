@@ -43,7 +43,7 @@ public class GerenteController {
     }
 
     @GetMapping("/{id}")
-    public GerenteResponseDTO buscarGerentePorId(@PathVariable int id) {
+    public GerenteResponseDTO buscarEntidadePorId(@PathVariable int id) {
         return gerenteService.buscarPorid(id);
     }
 

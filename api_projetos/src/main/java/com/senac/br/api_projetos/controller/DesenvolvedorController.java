@@ -43,7 +43,7 @@ public class DesenvolvedorController {
     }
 
     @GetMapping("/{id}")
-    public DesenvolvedorResponseDTO buscarDesenvolvedorPorId(@PathVariable int id) {
+    public DesenvolvedorResponseDTO buscarEntidadePorId(@PathVariable int id) {
         return desenvolvedorService.buscarPorId(id);
     }
 

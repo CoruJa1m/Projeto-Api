@@ -70,19 +70,17 @@ QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(novoQuadroProjet
     }
 
     public QuadroProjetoResponseDTO buscarPorId(int id) {
-        return toResponse(buscarEntidarPorId(id));
+        return toResponse(buscarEntidadePorId(id));
     }
 
     public QuadroProjetoResponseDTO atualizarPorId(int id, QuadroProjetoRequestDTO request) {
-        QuadroProjeto quadroProjetoAntigo = buscarEntidarPorId(id);
+        QuadroProjeto quadroProjetoAntigo = buscarEntidadePorId(id);
 
         //quadroProjetoAntigo.setProjeto(projetoRepository.findById(request.idEquipe())
         //        .orElseThrow(() -> new RuntimeException("Projeto não encontrado")));
 
         quadroProjetoAntigo.setProjeto(projetoRepository.findById(request.idProjeto())
                 .orElseThrow(() -> new RuntimeException("Projeto não encontrado")));
-
-        //quadroProjetoAntigo.setAtividades(atividadeRepository.findAllById(request.idAtividades()));
 
         QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(quadroProjetoAntigo);
         return toResponse(quadroProjetoSalvo);
@@ -93,7 +91,7 @@ QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(novoQuadroProjet
         return quadroProjetoRepository.findAll().stream().map(this::toResponse).toList();
     }
 
-    private QuadroProjeto buscarEntidarPorId(int id) {
+    private QuadroProjeto buscarEntidadePorId(int id) {
         return quadroProjetoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Quadro do projeto com o id " + id + " não foi encontrado."));

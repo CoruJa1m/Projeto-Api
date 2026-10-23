@@ -43,7 +43,7 @@ public class EquipeController {
     }
 
     @GetMapping("/{id}")
-    public EquipeResponseDTO buscarEquipe(@PathVariable int id) {
+    public EquipeResponseDTO buscarEntidarPorId(@PathVariable int id) {
         return equipeService.buscarPorid(id);
     }
 

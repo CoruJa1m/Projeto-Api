@@ -39,11 +39,11 @@ public class ProjetoService {
     }
 
     public ProjetoResponseDTO buscarPorId(int id) {
-        return toResponse(buscarEntidarPorId(id));
+        return toResponse(buscarEntidadePorId(id));
     }
 
     public ProjetoResponseDTO atualizarPorId(int id, ProjetoRequestDTO request) {
-        Projeto projetoAntigo = buscarEntidarPorId(id);
+        Projeto projetoAntigo = buscarEntidadePorId(id);
 
         projetoAntigo.setNome(request.nome());
         projetoAntigo.setPrazo(request.prazo());
@@ -68,7 +68,7 @@ public class ProjetoService {
                         .toList());
     }
 
-    private Projeto buscarEntidarPorId(int id) {
+    private Projeto buscarEntidadePorId(int id) {
         return projetoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Projeto com o id " + id + " não foi encontrado."));
     }

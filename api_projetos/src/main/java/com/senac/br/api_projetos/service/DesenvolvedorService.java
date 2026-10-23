@@ -64,6 +64,14 @@ public class DesenvolvedorService {
         return toResponse(devSalvo);
     }
 
+
+    public List<DesenvolvedorResponseDTO> buscarTodosPorId(List<Integer> ids) {
+        return ids.stream()
+                .map(this::buscarEntidadePorId)
+                .map(this::toResponse)
+                .toList();
+    }
+
     private DesenvolvedorResponseDTO toResponse(Desenvolvedor desenvolvedor) {
         return new DesenvolvedorResponseDTO(
                 desenvolvedor.getId(),

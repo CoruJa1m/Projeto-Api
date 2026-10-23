@@ -48,7 +48,7 @@ public class ProjetoController {
     }
 
     @PutMapping("/{id}")
-    public ProjetoResponseDTO atualizarProjetoPorId(@PathVariable int id,
+    public ProjetoResponseDTO buscarEntidadePorId(@PathVariable int id,
             @RequestBody @Valid ProjetoRequestDTO request) {
         return projetoService.atualizarPorId(id, request);
     }

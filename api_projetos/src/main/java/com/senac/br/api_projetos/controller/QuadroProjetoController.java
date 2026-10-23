@@ -33,7 +33,7 @@ public class QuadroProjetoController {
     }
 
     @GetMapping("/{id}")
-    public QuadroProjetoResponseDTO buscarQuadroProjeto(@PathVariable int id) {
+    public QuadroProjetoResponseDTO buscarEntidadePorId(@PathVariable int id) {
         return quadroProjetoService.buscarPorId(id);
     }
 
