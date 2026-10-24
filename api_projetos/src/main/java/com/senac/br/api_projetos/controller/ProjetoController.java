@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.senac.br.api_projetos.dto.projeto.ProjetoAtualizacaoDTO;
 import com.senac.br.api_projetos.dto.projeto.ProjetoRequestDTO;
 import com.senac.br.api_projetos.dto.projeto.ProjetoResponseDTO;
 import com.senac.br.api_projetos.service.ProjetoService;
@@ -50,7 +51,12 @@ public class ProjetoController {
     @PutMapping("/{id}")
     public ProjetoResponseDTO buscarEntidadePorId(@PathVariable int id,
             @RequestBody @Valid ProjetoRequestDTO request) {
-        return projetoService.atualizarPorId(id, request);
+        return projetoService.atualizarPorId(id, null);
     }
 
+
+    @PutMapping("projeto/{id}")
+    public ProjetoResponseDTO atualizarProjetoPorId(@PathVariable int id, @RequestBody @Valid ProjetoAtualizacaoDTO request) {
+        return projetoService.atualizarPorId(id, request);
+        }
 }

@@ -3,28 +3,41 @@ package com.senac.br.api_projetos.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.senac.br.api_projetos.dto.projeto.ProjetoAtualizacaoDTO;
 import com.senac.br.api_projetos.dto.projeto.ProjetoRequestDTO;
 import com.senac.br.api_projetos.dto.projeto.ProjetoResponseDTO;
+import com.senac.br.api_projetos.model.Equipe;
 import com.senac.br.api_projetos.model.Projeto;
 import com.senac.br.api_projetos.model.QuadroProjeto;
+import com.senac.br.api_projetos.repository.EquipeRepository;
 import com.senac.br.api_projetos.repository.ProjetoRepository;
 
 @Service
 public class ProjetoService {
 
     private final ProjetoRepository projetoRepository;
+    private final EquipeRepository equipeRepository;
 
-    public ProjetoService(ProjetoRepository projetoRepository) {
+    public ProjetoService(ProjetoRepository projetoRepository, EquipeRepository equipeRepository) {
         this.projetoRepository = projetoRepository;
+        this.equipeRepository = equipeRepository;
     }
 
+    @Transactional 
     public ProjetoResponseDTO salvar(ProjetoRequestDTO request) {
+
+
+        Equipe novaEquipe = equipeRepository.findById(request.idEquipe())
+                .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
+
+
         Projeto novoProjeto = new Projeto();
 
         novoProjeto.setNome(request.nome());
         novoProjeto.setPrazo(request.prazo());
-
+        novoProjeto.setEquipe(novaEquipe);
         Projeto projetoSalvo = projetoRepository.save(novoProjeto);
         return toResponse(projetoSalvo);
     }
@@ -42,7 +55,7 @@ public class ProjetoService {
         return toResponse(buscarEntidadePorId(id));
     }
 
-    public ProjetoResponseDTO atualizarPorId(int id, ProjetoRequestDTO request) {
+    public ProjetoResponseDTO atualizarPorId(int id, ProjetoAtualizacaoDTO request) {
         Projeto projetoAntigo = buscarEntidadePorId(id);
 
         projetoAntigo.setNome(request.nome());

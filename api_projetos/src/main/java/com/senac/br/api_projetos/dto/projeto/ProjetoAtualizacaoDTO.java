@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record ProjetoAtualizaçãoDTO(
-    @NotBlank(message = "Nome não pode estar vazio") String nome,
+public record ProjetoAtualizacaoDTO(
+     @NotBlank(message = "Nome não pode estar vazio") String nome,
     @NotNull (message = "Projeto precisa de um prazo") LocalDateTime prazo
 ) {
 
