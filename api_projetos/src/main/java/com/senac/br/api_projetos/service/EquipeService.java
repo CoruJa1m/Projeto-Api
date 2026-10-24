@@ -3,14 +3,18 @@ package com.senac.br.api_projetos.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.senac.br.api_projetos.dto.equipe.EquipeRequestDTO;
 import com.senac.br.api_projetos.dto.equipe.EquipeResponseDTO;
 import com.senac.br.api_projetos.model.Desenvolvedor;
 import com.senac.br.api_projetos.model.Equipe;
+import com.senac.br.api_projetos.model.GerenteProjeto;
 import com.senac.br.api_projetos.repository.DesenvolvedorRepository;
 import com.senac.br.api_projetos.repository.EquipeRepository;
 import com.senac.br.api_projetos.repository.GerenteRepository;
+
+
 
 @Service
 public class EquipeService {
@@ -26,21 +30,55 @@ public class EquipeService {
         this.desenvolvedorRepository = desenvolvedorRepository;
     }
 
+    @Transactional 
     public EquipeResponseDTO salvar(EquipeRequestDTO request) {
-        Equipe equipe = new Equipe();
+        validarGerenteDisponivel(request.idGerente());
 
-        equipe.setGerente(gerenteRepository.findById(request.idGerente())
-                .orElseThrow(() -> new RuntimeException("Gerente não encontrado")));
+        GerenteProjeto gerenteNovo = gerenteRepository.findById(request.idGerente())
+                .orElseThrow(() -> new RuntimeException("Gerente não encontrado"));
 
-        equipe.setDesenvolvedores(desenvolvedorRepository.findAllById(request.idDesenvolvedores()));
+         List<Desenvolvedor> desenvolvedores = desenvolvedorRepository
+        .findAllById(request.idDesenvolvedores());   
 
-        if (equipe.getDesenvolvedores().isEmpty()) {
-            throw new IllegalArgumentException("Nenhum desenvolvedor cadastrado ou desenvolvedores não encontrados");
+         for (var id : request.idDesenvolvedores()) {
+        validarDesenvolvedorDisponivel(id);
+    }
+
+        Equipe novaEquipe = new Equipe();
+        novaEquipe.setGerente(gerenteNovo);
+        novaEquipe.setDesenvolvedores(desenvolvedores);
+
+        Equipe equipeSalva = equipeRepository.save(novaEquipe);
+
+        // Associar cada desenvolvedor à equipe salva
+        for (var desenvolvedor : desenvolvedores) {
+        desenvolvedor.setEquipe(equipeSalva);
         }
 
-        Equipe equipeSalva = equipeRepository.save(equipe);
+// Salvar os desenvolvedores atualizados
+        desenvolvedorRepository.saveAll(desenvolvedores);
 
-        return toResponse(equipeSalva);
+        return toResponse(equipeSalva); 
+    }
+
+
+
+    private void validarGerenteDisponivel(Integer idGerente) {
+        if (equipeRepository.existsByGerente_Id(idGerente)) {
+            throw new IllegalArgumentException("O gerente com a id " + idGerente + " já está associado a uma equipe.");
+        }
+    }
+
+    private void validarDesenvolvedorDisponivel(Integer idDesenvolvedor) {
+        var desenvolvedor = desenvolvedorRepository.findById(idDesenvolvedor)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Desenvolvedor não encontrado"));
+
+        if (desenvolvedor.getEquipe() != null) {
+            throw new IllegalArgumentException(
+                    "O desenvolvedor com a id " + idDesenvolvedor +
+                            " já está associado a uma equipe.");
+        }
     }
 
     public String deletar(int id) {
@@ -76,15 +114,14 @@ public class EquipeService {
         return toResponse(equipeSalva);
     }
 
- private EquipeResponseDTO toResponse(Equipe equipe) {
-    return new EquipeResponseDTO(
-        equipe.getId(),
-        equipe.getGerente().getId(),
-        equipe.getDesenvolvedores().stream()
-            .map(Desenvolvedor::getId)
-            .toList()
-    );
-}
+    private EquipeResponseDTO toResponse(Equipe equipe) {
+        return new EquipeResponseDTO(
+                equipe.getId(),
+                equipe.getGerente().getId(),
+                equipe.getDesenvolvedores().stream()
+                        .map(Desenvolvedor::getId)
+                        .toList());
+    }
 
     private Equipe buscarEntidadePorId(int id) {
         return equipeRepository.findById(id)
