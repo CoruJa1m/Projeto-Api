@@ -34,4 +34,16 @@ public class Equipe {
     @OneToMany(mappedBy = "equipe")
     private List<Desenvolvedor> desenvolvedores = new ArrayList<>();
 
+
+
+    public void adicionarDesenvolvedor(Desenvolvedor desenvolvedor) {
+        desenvolvedores.add(desenvolvedor);
+        desenvolvedor.setEquipe(this);
+    }   
+
+
+    public void removerDesenvolvedor(Desenvolvedor desenvolvedor) {
+        desenvolvedores.remove(desenvolvedor);
+        desenvolvedor.setEquipe(this);
+    }
 }

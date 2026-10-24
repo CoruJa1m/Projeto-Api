@@ -44,4 +44,15 @@ public class Atividade {
     @JoinColumn(name = "quadro_projeto_id", nullable = false)
     private QuadroProjeto quadroProjeto;
 
+
+    public void adicionarDesenvolvedor(Desenvolvedor desenvolvedor) {
+        atribuidos.add(desenvolvedor);
+        desenvolvedor.getAtividades().add(this);
+    }
+
+    public void removerDesenvolvedor(Desenvolvedor desenvolvedor) {
+        atribuidos.remove(desenvolvedor);
+        desenvolvedor.getAtividades().remove(this);
+    }   
+
 }
