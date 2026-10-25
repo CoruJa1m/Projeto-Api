@@ -8,9 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.senac.br.api_projetos.dto.quadro_projeto.QuadroProjetoRequestDTO;
 import com.senac.br.api_projetos.dto.quadro_projeto.QuadroProjetoResponseDTO;
 import com.senac.br.api_projetos.model.Atividade;
+import com.senac.br.api_projetos.model.Projeto;
 import com.senac.br.api_projetos.model.QuadroProjeto;
-import com.senac.br.api_projetos.repository.AtividadeRepository;
-import com.senac.br.api_projetos.repository.EquipeRepository;
 import com.senac.br.api_projetos.repository.ProjetoRepository;
 import com.senac.br.api_projetos.repository.QuadroProjetoRepository;
 
@@ -19,45 +18,26 @@ public class QuadroProjetoService {
 
     private final QuadroProjetoRepository quadroProjetoRepository;
     private final ProjetoRepository projetoRepository;
-    private final EquipeRepository equipeRepository;
-    private final AtividadeRepository atividadeRepository;
 
     public QuadroProjetoService(QuadroProjetoRepository quadroProjetoRepository,
-            ProjetoRepository projetoRepository,
-            EquipeRepository equipeRepository, AtividadeRepository atividadeRepository) {
+            ProjetoRepository projetoRepository) {
         this.quadroProjetoRepository = quadroProjetoRepository;
         this.projetoRepository = projetoRepository;
-        this.equipeRepository = equipeRepository;
-        this.atividadeRepository = atividadeRepository;
     }
 
     @Transactional
     public QuadroProjetoResponseDTO salvar(QuadroProjetoRequestDTO request) {
+
+        Projeto projeto = projetoRepository.findById(request.idProjeto())
+                .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
         QuadroProjeto novoQuadroProjeto = new QuadroProjeto();
-
-        /*novoQuadroProjeto.setProjeto(projetoRepository.findById(request.idEquipe())
-                .orElseThrow(() -> new RuntimeException("Projeto não encontrado")));
-
-        novoQuadroProjeto.setProjeto(
-                projetoRepository.findById(request.idProjeto())
-                        .orElseThrow(() -> new IllegalArgumentException("Projeto não encontrado")));
-
-        List<Atividade> atividades = atividadeRepository.findAllById(request.idAtividades());
-
-        if (atividades.isEmpty()) {
-            throw new IllegalArgumentException("Atividades não encontradas");
-        }
-
-        novoQuadroProjeto.setAtividades(atividades);
-
         
-        quadroProjetoSalvo.getAtividades().forEach(
-                atividade -> atividade.setQuadroProjeto(quadroProjetoSalvo));/* */
-QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(novoQuadroProjeto);
+        novoQuadroProjeto.setProjeto(projeto);
 
-        atividadeRepository.saveAll(quadroProjetoSalvo.getAtividades());
-
+        QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(novoQuadroProjeto);
         return toResponse(quadroProjetoSalvo);
+
+
     }
 
     public String deletar(int id) {
@@ -76,11 +56,8 @@ QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(novoQuadroProjet
     public QuadroProjetoResponseDTO atualizarPorId(int id, QuadroProjetoRequestDTO request) {
         QuadroProjeto quadroProjetoAntigo = buscarEntidadePorId(id);
 
-        //quadroProjetoAntigo.setProjeto(projetoRepository.findById(request.idEquipe())
-        //        .orElseThrow(() -> new RuntimeException("Projeto não encontrado")));
-
         quadroProjetoAntigo.setProjeto(projetoRepository.findById(request.idProjeto())
-                .orElseThrow(() -> new RuntimeException("Projeto não encontrado")));
+               .orElseThrow(() -> new RuntimeException("Projeto não encontrado")));
 
         QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(quadroProjetoAntigo);
         return toResponse(quadroProjetoSalvo);
