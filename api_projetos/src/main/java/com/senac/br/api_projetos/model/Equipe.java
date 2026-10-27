@@ -29,21 +29,23 @@ public class Equipe {
 
     @OneToOne
     @JoinColumn(name = "gerente_id", nullable = false)
+    @ToString.Exclude
     private GerenteProjeto gerente;
 
     @OneToMany(mappedBy = "equipe")
+    @ToString.Exclude
     private List<Desenvolvedor> desenvolvedores = new ArrayList<>();
 
-
-
     public void adicionarDesenvolvedor(Desenvolvedor desenvolvedor) {
-        desenvolvedores.add(desenvolvedor);
+        if (!desenvolvedores.contains(desenvolvedor)) {
+            desenvolvedores.add(desenvolvedor);
+        }
         desenvolvedor.setEquipe(this);
-    }   
-
+    }
 
     public void removerDesenvolvedor(Desenvolvedor desenvolvedor) {
-        desenvolvedores.remove(desenvolvedor);
-        desenvolvedor.setEquipe(this);
+        if (desenvolvedores.remove(desenvolvedor)) {
+            desenvolvedor.setEquipe(null);
+        }
     }
 }

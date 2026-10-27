@@ -1,6 +1,7 @@
 package com.senac.br.api_projetos.controller;
 
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +29,8 @@ public class EquipeController {
     }
 
     @PostMapping
-    public EquipeResponseDTO cadastrarEquipe(@RequestBody @Valid EquipeRequestDTO equipe) {
-        return equipeService.salvar(equipe);
+    public ResponseEntity<EquipeResponseDTO> cadastrarEquipe(@RequestBody @Valid EquipeRequestDTO equipe) {
+        return ResponseEntity.status(201).body(equipeService.salvar(equipe));
     }
 
     @DeleteMapping("/{id}")
@@ -53,4 +54,26 @@ public class EquipeController {
 
     }
 
+    @PutMapping("/{id}/desenvolvedores/{idDesenvolvedor}")
+    public EquipeResponseDTO adicionarDesenvolvedor(@PathVariable int id,
+            @PathVariable int idDesenvolvedor) {
+        return equipeService.adicionarDesenvolvedor(id, idDesenvolvedor);
+    }
+
+    @DeleteMapping("/{id}/desenvolvedores/{idDesenvolvedor}")
+    public EquipeResponseDTO removerDesenvolvedor(@PathVariable int id,
+            @PathVariable int idDesenvolvedor) {
+        return equipeService.removerDesenvolvedor(id, idDesenvolvedor);
+    }
+
+    @PutMapping("/{id}/gerente/{idGerente}")
+    public EquipeResponseDTO alterarGerente(@PathVariable int id, @PathVariable int idGerente) {
+        return equipeService.alterarGerente(id, idGerente);
+    }
+
+    @PutMapping("/{id}/desenvolvedores/{idDesenvolvedor}/transferencia/{idEquipe}")
+    public EquipeResponseDTO transferirDesenvolvedor(@PathVariable int id,
+            @PathVariable int idDesenvolvedor, @PathVariable int idEquipe) {
+        return equipeService.transferirDesenvolvedor(id, idEquipe, idDesenvolvedor);
+    }
 }
