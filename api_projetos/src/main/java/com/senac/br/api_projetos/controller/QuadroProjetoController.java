@@ -4,7 +4,6 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,9 +45,10 @@ public class QuadroProjetoController {
     }
 
     @PostMapping
-    public ResponseEntity<QuadroProjetoResponseDTO> cadastrarQuadroProjeto(@RequestBody @Valid QuadroProjetoRequestDTO request) {
-       return ResponseEntity.status(201)
-        .body(quadroProjetoService.salvar(request));
+    public ResponseEntity<QuadroProjetoResponseDTO> cadastrarQuadroProjeto(
+            @RequestBody @Valid QuadroProjetoRequestDTO request) {
+        return ResponseEntity.status(201)
+                .body(quadroProjetoService.salvar(request));
     }
 
     @PutMapping("/{id}")

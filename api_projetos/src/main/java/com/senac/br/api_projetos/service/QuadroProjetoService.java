@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.senac.br.api_projetos.dto.quadro_projeto.QuadroProjetoRequestDTO;
 import com.senac.br.api_projetos.dto.quadro_projeto.QuadroProjetoResponseDTO;
 import com.senac.br.api_projetos.model.Atividade;
+import com.senac.br.api_projetos.model.Desenvolvedor;
 import com.senac.br.api_projetos.model.Projeto;
 import com.senac.br.api_projetos.model.QuadroProjeto;
 import com.senac.br.api_projetos.repository.ProjetoRepository;
@@ -31,39 +32,52 @@ public class QuadroProjetoService {
         Projeto projeto = projetoRepository.findById(request.idProjeto())
                 .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
         QuadroProjeto novoQuadroProjeto = new QuadroProjeto();
-        
+
         novoQuadroProjeto.setProjeto(projeto);
 
         QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(novoQuadroProjeto);
         return toResponse(quadroProjetoSalvo);
 
-
     }
 
+    @Transactional
     public String deletar(int id) {
-        if (quadroProjetoRepository.existsById(id)) {
-            quadroProjetoRepository.deleteById(id);
-            return "Quadro do projeto deletado com sucesso";
-        } else {
-            return "Quadro do projeto não encontrado, verifique novamente!!";
+        QuadroProjeto quadro = buscarEntidadePorId(id);
+        if (!quadro.getAtividades().isEmpty()) {
+            throw new IllegalArgumentException("Exclua as atividades antes de excluir o quadro");
         }
+        quadroProjetoRepository.delete(quadro);
+        return "Quadro do projeto deletado com sucesso";
     }
 
+    @Transactional
     public QuadroProjetoResponseDTO buscarPorId(int id) {
         return toResponse(buscarEntidadePorId(id));
     }
 
+    @Transactional
     public QuadroProjetoResponseDTO atualizarPorId(int id, QuadroProjetoRequestDTO request) {
         QuadroProjeto quadroProjetoAntigo = buscarEntidadePorId(id);
 
-        quadroProjetoAntigo.setProjeto(projetoRepository.findById(request.idProjeto())
-               .orElseThrow(() -> new RuntimeException("Projeto não encontrado")));
+        Projeto destino = projetoRepository.findById(request.idProjeto())
+                .orElseThrow(() -> new IllegalArgumentException("Projeto não encontrado"));
+        for (Atividade atividade : quadroProjetoAntigo.getAtividades()) {
+            for (Desenvolvedor desenvolvedor : atividade.getAtribuidos()) {
+                if (desenvolvedor.getEquipe() == null
+                        || !desenvolvedor.getEquipe().getId().equals(destino.getEquipe().getId())) {
+                    throw new IllegalArgumentException(
+                            "Os responsáveis do quadro não pertencem à equipe do projeto de destino");
+                }
+            }
+        }
+        quadroProjetoAntigo.setProjeto(destino);
 
         QuadroProjeto quadroProjetoSalvo = quadroProjetoRepository.save(quadroProjetoAntigo);
         return toResponse(quadroProjetoSalvo);
 
     }
 
+    @Transactional
     public List<QuadroProjetoResponseDTO> listar() {
         return quadroProjetoRepository.findAll().stream().map(this::toResponse).toList();
     }

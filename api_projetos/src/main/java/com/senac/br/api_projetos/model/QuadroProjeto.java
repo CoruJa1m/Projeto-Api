@@ -32,10 +32,11 @@ public class QuadroProjeto {
     @ManyToOne
     @JoinColumn(name = "projeto_id", nullable = false)
     @NotNull(message = "Este quadro precisa de um projeto associado")
+    @ToString.Exclude
     private Projeto projeto;
 
-
     @OneToMany(mappedBy = "quadroProjeto")
+    @ToString.Exclude
     private List<Atividade> atividades = new ArrayList<>();
 
 }
