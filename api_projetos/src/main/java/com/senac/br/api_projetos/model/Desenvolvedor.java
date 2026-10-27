@@ -41,9 +41,11 @@ public class Desenvolvedor extends Funcionario {
 
     @ManyToOne
     @JsonIgnore
+    @ToString.Exclude
     private Equipe equipe;
 
     @ManyToMany
     @JoinTable(name = "atividade_desenvolvedor", joinColumns = @JoinColumn(name = "desenvolvedor_id"), inverseJoinColumns = @JoinColumn(name = "atividade_id"))
+    @ToString.Exclude
     private List<Atividade> atividades = new ArrayList<>();
 }

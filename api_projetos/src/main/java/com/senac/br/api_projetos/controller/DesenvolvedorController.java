@@ -1,6 +1,7 @@
 package com.senac.br.api_projetos.controller;
 
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +29,9 @@ public class DesenvolvedorController {
     }
 
     @PostMapping
-    public DesenvolvedorResponseDTO cadastrarDesenvolvedor(@RequestBody @Valid DesenvolvedorRequestDTO desenvolvedor) {
-        return desenvolvedorService.salvar(desenvolvedor);
+    public ResponseEntity<DesenvolvedorResponseDTO> cadastrarDesenvolvedor(
+            @RequestBody @Valid DesenvolvedorRequestDTO desenvolvedor) {
+        return ResponseEntity.status(201).body(desenvolvedorService.salvar(desenvolvedor));
     }
 
     @DeleteMapping("/{id}")
