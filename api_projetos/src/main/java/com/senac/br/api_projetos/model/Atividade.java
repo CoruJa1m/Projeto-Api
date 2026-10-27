@@ -38,21 +38,26 @@ public class Atividade {
     private String descricao;
 
     @ManyToMany(mappedBy = "atividades")
+    @ToString.Exclude
     private List<Desenvolvedor> atribuidos = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "quadro_projeto_id", nullable = false)
+    @ToString.Exclude
     private QuadroProjeto quadroProjeto;
 
-
     public void adicionarDesenvolvedor(Desenvolvedor desenvolvedor) {
-        atribuidos.add(desenvolvedor);
-        desenvolvedor.getAtividades().add(this);
+        if (!atribuidos.contains(desenvolvedor)) {
+            atribuidos.add(desenvolvedor);
+        }
+        if (!desenvolvedor.getAtividades().contains(this)) {
+            desenvolvedor.getAtividades().add(this);
+        }
     }
 
     public void removerDesenvolvedor(Desenvolvedor desenvolvedor) {
         atribuidos.remove(desenvolvedor);
         desenvolvedor.getAtividades().remove(this);
-    }   
+    }
 
 }

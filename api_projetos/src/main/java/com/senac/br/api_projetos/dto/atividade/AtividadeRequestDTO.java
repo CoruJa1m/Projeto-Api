@@ -15,7 +15,7 @@ public record AtividadeRequestDTO(
 
         @NotNull(message = "Status é obrigatório") StatusAtividade status,
 
-        @NotNull(message = "Quadro do projeto é obrigatório") Integer idQuadroProjeto,
+        @NotNull(message = "Quadro do projeto é obrigatório") @Positive Integer idQuadroProjeto,
 
         @NotEmpty(message = "Informe ao menos um desenvolvedor") List<@NotNull @Positive Integer> idDesenvolvedores
 
