@@ -33,15 +33,13 @@ public class Projeto {
 
     private LocalDateTime prazo;
 
-
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "equipe_id", nullable = false)
+    @ToString.Exclude
     private Equipe equipe;
 
-
-    
-
     @OneToMany(mappedBy = "projeto")
+    @ToString.Exclude
     private List<QuadroProjeto> quadros = new ArrayList<>();
 
 }

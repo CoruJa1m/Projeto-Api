@@ -9,6 +9,8 @@ import com.senac.br.api_projetos.dto.projeto.ProjetoAtualizacaoDTO;
 import com.senac.br.api_projetos.dto.projeto.ProjetoRequestDTO;
 import com.senac.br.api_projetos.dto.projeto.ProjetoResponseDTO;
 import com.senac.br.api_projetos.model.Equipe;
+import com.senac.br.api_projetos.model.Atividade;
+import com.senac.br.api_projetos.model.Desenvolvedor;
 import com.senac.br.api_projetos.model.Projeto;
 import com.senac.br.api_projetos.model.QuadroProjeto;
 import com.senac.br.api_projetos.repository.EquipeRepository;
@@ -25,14 +27,15 @@ public class ProjetoService {
         this.equipeRepository = equipeRepository;
     }
 
-    @Transactional 
+    @Transactional
     public ProjetoResponseDTO salvar(ProjetoRequestDTO request) {
-
 
         Equipe novaEquipe = equipeRepository.findById(request.idEquipe())
                 .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
 
-
+        if (novaEquipe.getDesenvolvedores().isEmpty()) {
+            throw new IllegalArgumentException("Equipe precisa ter pelo menos um desenvolvedor");
+        }
         Projeto novoProjeto = new Projeto();
 
         novoProjeto.setNome(request.nome());
@@ -42,19 +45,43 @@ public class ProjetoService {
         return toResponse(projetoSalvo);
     }
 
+    @Transactional
     public String deletar(int id) {
-        if (projetoRepository.existsById(id)) {
-            projetoRepository.deleteById(id);
-            return "Projeto deletado com sucesso";
-        } else {
-            return "Projeto não encontrado, verifique novamente!!";
+        Projeto projeto = buscarEntidadePorId(id);
+        if (!projeto.getQuadros().isEmpty()) {
+            throw new IllegalArgumentException("Exclua os quadros antes de excluir o projeto");
         }
+        projetoRepository.delete(projeto);
+        return "Projeto deletado com sucesso";
     }
 
+    @Transactional
+    public ProjetoResponseDTO alterarEquipe(int id, int idEquipe) {
+        Projeto projeto = buscarEntidadePorId(id);
+        Equipe equipe = equipeRepository.findById(idEquipe)
+                .orElseThrow(() -> new IllegalArgumentException("Equipe não encontrada"));
+        if (equipe.getDesenvolvedores().isEmpty()) {
+            throw new IllegalArgumentException("Equipe precisa ter pelo menos um desenvolvedor");
+        }
+        for (QuadroProjeto quadro : projeto.getQuadros()) {
+            for (Atividade atividade : quadro.getAtividades()) {
+                for (Desenvolvedor desenvolvedor : atividade.getAtribuidos()) {
+                    if (desenvolvedor.getEquipe() == null || !desenvolvedor.getEquipe().getId().equals(idEquipe)) {
+                        throw new IllegalArgumentException("A nova equipe não contém todos os responsáveis pelas atividades");
+                    }
+                }
+            }
+        }
+        projeto.setEquipe(equipe);
+        return toResponse(projetoRepository.save(projeto));
+    }
+
+    @Transactional
     public ProjetoResponseDTO buscarPorId(int id) {
         return toResponse(buscarEntidadePorId(id));
     }
 
+    @Transactional
     public ProjetoResponseDTO atualizarPorId(int id, ProjetoAtualizacaoDTO request) {
         Projeto projetoAntigo = buscarEntidadePorId(id);
 
@@ -65,6 +92,7 @@ public class ProjetoService {
 
     }
 
+    @Transactional
     public List<ProjetoResponseDTO> listar() {
         return projetoRepository.findAll().stream().map(this::toResponse).toList();
     }

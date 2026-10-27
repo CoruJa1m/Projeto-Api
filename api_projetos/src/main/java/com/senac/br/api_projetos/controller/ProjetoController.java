@@ -1,6 +1,7 @@
 package com.senac.br.api_projetos.controller;
 
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,8 +35,8 @@ public class ProjetoController {
     }
 
     @PostMapping
-    public ProjetoResponseDTO cadastrarProjeto(@RequestBody @Valid ProjetoRequestDTO projeto) {
-        return projetoService.salvar(projeto);
+    public ResponseEntity<ProjetoResponseDTO> cadastrarProjeto(@RequestBody @Valid ProjetoRequestDTO projeto) {
+        return ResponseEntity.status(201).body(projetoService.salvar(projeto));
     }
 
     @GetMapping("/{id}")
@@ -49,14 +50,13 @@ public class ProjetoController {
     }
 
     @PutMapping("/{id}")
-    public ProjetoResponseDTO buscarEntidadePorId(@PathVariable int id,
-            @RequestBody @Valid ProjetoRequestDTO request) {
-        return projetoService.atualizarPorId(id, null);
+    public ProjetoResponseDTO atualizarProjetoPorId(@PathVariable int id,
+            @RequestBody @Valid ProjetoAtualizacaoDTO request) {
+        return projetoService.atualizarPorId(id, request);
     }
 
-
-    @PutMapping("projeto/{id}")
-    public ProjetoResponseDTO atualizarProjetoPorId(@PathVariable int id, @RequestBody @Valid ProjetoAtualizacaoDTO request) {
-        return projetoService.atualizarPorId(id, request);
-        }
+    @PutMapping("/{id}/equipe/{idEquipe}")
+    public ProjetoResponseDTO alterarEquipe(@PathVariable int id, @PathVariable int idEquipe) {
+        return projetoService.alterarEquipe(id, idEquipe);
+    }
 }
