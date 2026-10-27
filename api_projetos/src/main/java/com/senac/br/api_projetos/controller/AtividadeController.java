@@ -1,5 +1,6 @@
 package com.senac.br.api_projetos.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +22,10 @@ public class AtividadeController {
         this.atividadeService = atividadeService;
     }
 
-    @PostMapping
-    public AtividadeResponseDTO cadastrarAtividade(@RequestBody @Valid AtividadeRequestDTO atividade) {
-        return atividadeService.salvar(atividade);
+ @PostMapping
+    public ResponseEntity<AtividadeResponseDTO> cadastrarAtividade(
+            @Valid @RequestBody AtividadeRequestDTO request) {
+        return ResponseEntity.status(201).body(atividadeService.salvar(request));
     }
 
 }
