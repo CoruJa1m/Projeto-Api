@@ -1,7 +1,13 @@
 package com.senac.br.api_projetos.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,5 +33,30 @@ public class AtividadeController {
             @Valid @RequestBody AtividadeRequestDTO request) {
         return ResponseEntity.status(201).body(atividadeService.salvar(request));
     }
+
+
+    @DeleteMapping("/{id}")
+    public String deletarAtividade(@PathVariable int id) {
+        return atividadeService.deletar(id);
+    }
+
+    @GetMapping("/{id}")
+    public AtividadeResponseDTO buscarAtividade(@PathVariable int id) {
+        return atividadeService.buscarPorId(id);
+    }
+
+    @GetMapping 
+    public List<AtividadeResponseDTO> listarAtividades() {
+        return atividadeService.listar();
+    }
+
+
+    @PutMapping("{id}")
+    public AtividadeResponseDTO buscarEntidadePorId (@PathVariable int id, @RequestBody @Valid AtividadeRequestDTO request){
+        return atividadeService.buscarPorId(id);
+    }
+
+    
+
 
 }

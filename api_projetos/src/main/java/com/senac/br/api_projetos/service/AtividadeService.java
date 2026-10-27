@@ -99,4 +99,11 @@ private void validarResponsaveisDaEquipe(
 
     }
 
+
+    public List<AtividadeResponseDTO> listar() {
+        return atividadeRepository.findAll().stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
 }
