@@ -1,6 +1,7 @@
 package com.senac.br.api_projetos.controller;
 
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +29,8 @@ public class GerenteController {
     }
 
     @PostMapping
-    public GerenteResponseDTO cadastrarGerente(@RequestBody @Valid GerenteRequestDTO gerente) {
-        return gerenteService.salvar(gerente);
+    public ResponseEntity<GerenteResponseDTO> cadastrarGerente(@RequestBody @Valid GerenteRequestDTO gerente) {
+        return ResponseEntity.status(201).body(gerenteService.salvar(gerente));
     }
 
     @DeleteMapping("/{id}")
