@@ -220,7 +220,9 @@ public class EquipeService {
     }
 
     private EquipeResponseDTO toResponse(Equipe equipe) {
-        return new EquipeResponseDTO(equipe.getId(), equipe.getGerente().getId(),
-                equipe.getDesenvolvedores().stream().map(Desenvolvedor::getId).toList());
+        return new EquipeResponseDTO(
+                equipe.getId(),
+                equipe.getGerente(),
+                new ArrayList<>(equipe.getDesenvolvedores()));
     }
 }

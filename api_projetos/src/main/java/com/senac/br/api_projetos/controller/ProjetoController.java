@@ -59,4 +59,10 @@ public class ProjetoController {
     public ProjetoResponseDTO alterarEquipe(@PathVariable int id, @PathVariable int idEquipe) {
         return projetoService.alterarEquipe(id, idEquipe);
     }
+
+    @PutMapping("/{id}/concluir")
+    public ProjetoResponseDTO concluirProjeto(@PathVariable int id) {
+        return projetoService.concluir(id);
+    }
+
 }

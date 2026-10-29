@@ -1,6 +1,8 @@
 package com.senac.br.api_projetos.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,18 +15,23 @@ import com.senac.br.api_projetos.model.Atividade;
 import com.senac.br.api_projetos.model.Desenvolvedor;
 import com.senac.br.api_projetos.model.Projeto;
 import com.senac.br.api_projetos.model.QuadroProjeto;
+import com.senac.br.api_projetos.model.enums.StatusAtividade;
 import com.senac.br.api_projetos.repository.EquipeRepository;
 import com.senac.br.api_projetos.repository.ProjetoRepository;
+import com.senac.br.api_projetos.repository.QuadroProjetoRepository;
 
 @Service
 public class ProjetoService {
 
     private final ProjetoRepository projetoRepository;
     private final EquipeRepository equipeRepository;
+    private final QuadroProjetoRepository quadroProjetoRepository;
 
-    public ProjetoService(ProjetoRepository projetoRepository, EquipeRepository equipeRepository) {
+    public ProjetoService(ProjetoRepository projetoRepository, EquipeRepository equipeRepository,
+            QuadroProjetoRepository quadroProjetoRepository) {
         this.projetoRepository = projetoRepository;
         this.equipeRepository = equipeRepository;
+        this.quadroProjetoRepository = quadroProjetoRepository;
     }
 
     @Transactional
@@ -67,7 +74,8 @@ public class ProjetoService {
             for (Atividade atividade : quadro.getAtividades()) {
                 for (Desenvolvedor desenvolvedor : atividade.getAtribuidos()) {
                     if (desenvolvedor.getEquipe() == null || !desenvolvedor.getEquipe().getId().equals(idEquipe)) {
-                        throw new IllegalArgumentException("A nova equipe não contém todos os responsáveis pelas atividades");
+                        throw new IllegalArgumentException(
+                                "A nova equipe não contém todos os responsáveis pelas atividades");
                     }
                 }
             }
@@ -97,16 +105,37 @@ public class ProjetoService {
         return projetoRepository.findAll().stream().map(this::toResponse).toList();
     }
 
+    @Transactional
+    public ProjetoResponseDTO concluir(int id) {
+        Projeto projeto = buscarEntidadePorId(id);
+        List<QuadroProjeto> quadrosDoProjeto = quadroProjetoRepository.findByProjetoId(id);
+
+        if (projeto.getAtivo() == true) {
+            throw new IllegalArgumentException("Este projeto ja foi dado como concluido");
+        }
+
+        if (projeto.getPrazo().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Este projeto ja passou do prazo");
+        }
+
+        if (quadrosDoProjeto.stream()
+                .flatMap(quadro -> quadro.getAtividades().stream())
+                .anyMatch(atividade -> atividade.getStatus() != StatusAtividade.CONCLUIDO)) {
+            throw new IllegalArgumentException("Ainda há atividades pendetes relacionada a esse projeto");
+        }
+
+        projeto.setAtivo(false);
+        return toResponse(projeto);
+    }
+
     private ProjetoResponseDTO toResponse(Projeto projeto) {
         return new ProjetoResponseDTO(
                 projeto.getId(),
                 projeto.getNome(),
                 projeto.getAtivo(),
                 projeto.getPrazo(),
-                projeto.getEquipe().getId(),
-                projeto.getQuadros().stream()
-                        .map(QuadroProjeto::getId)
-                        .toList());
+                projeto.getEquipe(),
+                new ArrayList<>(projeto.getQuadros()));
     }
 
     private Projeto buscarEntidadePorId(int id) {

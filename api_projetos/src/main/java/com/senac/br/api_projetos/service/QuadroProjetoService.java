@@ -1,6 +1,7 @@
 package com.senac.br.api_projetos.service;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,10 +92,8 @@ public class QuadroProjetoService {
     private QuadroProjetoResponseDTO toResponse(QuadroProjeto quadroProjeto) {
         return new QuadroProjetoResponseDTO(
                 quadroProjeto.getId(),
-                quadroProjeto.getProjeto().getId(),
-                quadroProjeto.getAtividades().stream()
-                        .map(Atividade::getId)
-                        .toList());
+                quadroProjeto.getProjeto(),
+                new ArrayList<>(quadroProjeto.getAtividades()));
     }
 
 }

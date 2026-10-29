@@ -145,8 +145,11 @@ public class AtividadeService {
     }
 
     private AtividadeResponseDTO toResponse(Atividade atividade) {
-        return new AtividadeResponseDTO(atividade.getId(), atividade.getDescricao(), atividade.getStatus(),
-                atividade.getQuadroProjeto().getId(),
-                atividade.getAtribuidos().stream().map(Desenvolvedor::getId).toList());
+        return new AtividadeResponseDTO(
+                atividade.getId(),
+                atividade.getDescricao(),
+                atividade.getStatus(),
+                atividade.getQuadroProjeto(),
+                new ArrayList<>(atividade.getAtribuidos()));
     }
 }
