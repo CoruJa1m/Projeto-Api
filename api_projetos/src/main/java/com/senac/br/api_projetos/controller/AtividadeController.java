@@ -74,4 +74,14 @@ public class AtividadeController {
         return atividadeService.moverParaQuadro(id, idQuadro);
     }
 
+    @GetMapping("/{id}/projeto")
+    public List<AtividadeResponseDTO> listarAtividadesPorProjeto(@PathVariable int id) {
+        return atividadeService.listarPorProjeto(id);
+    }
+
+    @PutMapping("/{id}/finalizar")
+    public AtividadeResponseDTO finalizarAtividade(@PathVariable int id) {
+        return atividadeService.finalizar(id);
+    }
+
 }

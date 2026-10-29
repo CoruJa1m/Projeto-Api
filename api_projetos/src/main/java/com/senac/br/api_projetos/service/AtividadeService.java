@@ -13,6 +13,7 @@ import com.senac.br.api_projetos.model.Atividade;
 import com.senac.br.api_projetos.model.Desenvolvedor;
 import com.senac.br.api_projetos.model.Equipe;
 import com.senac.br.api_projetos.model.QuadroProjeto;
+import com.senac.br.api_projetos.model.enums.StatusAtividade;
 import com.senac.br.api_projetos.repository.AtividadeRepository;
 import com.senac.br.api_projetos.repository.DesenvolvedorRepository;
 import com.senac.br.api_projetos.repository.QuadroProjetoRepository;
@@ -107,14 +108,37 @@ public class AtividadeService {
         return "Atividade deletada com sucesso";
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public AtividadeResponseDTO buscarPorId(int id) {
         return toResponse(buscarEntidadePorId(id));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<AtividadeResponseDTO> listar() {
         return atividadeRepository.findAll().stream().map(this::toResponse).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<AtividadeResponseDTO> listarPorProjeto(int id) {
+        return atividadeRepository.findAll()
+                .stream()
+                .filter(atividade -> atividade.getQuadroProjeto()
+                        .getProjeto()
+                        .getId()
+                        .equals(id))
+                .map(this::toResponse)
+                .toList();
+
+    }
+
+    @Transactional
+    public AtividadeResponseDTO finalizar(int id) {
+        Atividade atividade = buscarEntidadePorId(id);
+
+        atividade.setStatus(StatusAtividade.CONCLUIDO);
+
+        Atividade atividadeSalva = atividadeRepository.save(atividade);
+        return toResponse(atividadeSalva);
     }
 
     private void validarResponsaveisDaEquipe(QuadroProjeto quadro, List<Desenvolvedor> desenvolvedores) {
